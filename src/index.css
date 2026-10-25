@@ -103,53 +103,101 @@ section {
     }
 
     .navbar {
-        @apply fixed w-full left-1/2 py-5 px-5 md:px-20 -translate-x-1/2 z-[100] transition-all duration-300 ease-in-out;
+        @apply fixed inset-x-0 z-[100] transition-all duration-500 ease-out;
 
-        &.scrolled {
-            @apply top-0 bg-black;
+        .inner {
+            @apply relative mx-auto w-full flex items-center justify-between gap-6 rounded-2xl border transition-all duration-500 ease-out;
         }
 
         &.not-scrolled {
-            @apply md:top-10 top-0 bg-transparent;
+            @apply md:top-8 top-0 md:px-20 px-5 py-4;
+
+            .inner {
+                @apply max-w-[100%] border-transparent bg-transparent;
+            }
+
+            .nav-progress {
+                @apply opacity-0;
+            }
         }
 
-        .inner {
-            @apply mx-auto flex items-center justify-between;
+        &.scrolled {
+            @apply top-3 md:px-5 px-3;
+
+            .inner {
+                @apply max-w-6xl border-white/10 bg-black-100/70 backdrop-blur-xl md:px-4 px-3 py-2.5 shadow-[0_10px_40px_rgba(0,0,0,0.5)];
+            }
         }
 
         .logo {
-            @apply text-white-50 text-xl md:text-2xl font-semibold transition-transform duration-300 hover:scale-105;
+            @apply flex items-center gap-3 text-lg;
+        }
+
+        .logo-mark {
+            @apply flex items-center justify-center size-10 rounded-xl font-bold text-black text-base transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-105;
+            background: linear-gradient(135deg, #62e0ff, #52aeff 45%, #a78bfa);
         }
 
         nav.desktop {
             @apply hidden lg:flex items-center;
 
             ul {
-                @apply flex space-x-8;
+                @apply flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1;
+            }
 
-                li {
-                    @apply text-white-50 relative;
+            a {
+                @apply relative block rounded-full px-5 py-2 text-sm text-white-50 transition-colors duration-300 hover:bg-white/[0.06] hover:text-white;
 
-                    span {
-                        @apply transition-colors duration-300 hover:text-white;
-                    }
+                &::after {
+                    content: "";
+                    @apply absolute inset-x-5 bottom-1 h-px origin-center scale-x-0 opacity-0 transition-[scale,opacity] duration-300;
+                    background: linear-gradient(90deg, transparent, #62e0ff, transparent);
+                }
 
-                    .underline {
-                        @apply absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full;
+                &:hover::after {
+                    @apply scale-x-100 opacity-100;
+                }
+
+                &.active {
+                    @apply bg-white/10 text-white;
+
+                    &::after {
+                        @apply scale-x-0 opacity-0;
                     }
                 }
             }
         }
 
         .contact-btn {
-            @apply flex;
+            @apply hidden sm:flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-black transition-shadow duration-300 hover:shadow-[0_0_24px_rgba(98,224,255,0.45)];
+        }
 
-            .inner {
-                @apply px-5 py-2 rounded-lg bg-white text-black group-hover:bg-black-50 transition-colors duration-300;
+        .menu-toggle {
+            @apply lg:hidden flex items-center justify-center size-10 rounded-xl border border-white/10 bg-white/5 text-white cursor-pointer;
+        }
 
-                span {
-                    @apply group-hover:text-white transition-colors duration-300;
+        .nav-progress {
+            @apply absolute bottom-0 left-4 right-4 h-px origin-left transition-opacity duration-500;
+            background: linear-gradient(90deg, #62e0ff, #52aeff 40%, #fd5c79 70%, #6d45ce);
+        }
+
+        .mobile-menu {
+            @apply lg:hidden mx-auto mt-2 max-w-6xl rounded-2xl border border-white/10 bg-black-100/90 backdrop-blur-xl p-2 transition-all duration-300 origin-top;
+
+            &:not(.open) {
+                @apply invisible opacity-0 -translate-y-2 pointer-events-none;
+            }
+
+            a {
+                @apply block rounded-xl px-4 py-3 text-white-50 transition-colors hover:bg-white/5 hover:text-white;
+
+                &.active {
+                    @apply bg-white/10 text-white;
                 }
+            }
+
+            .mobile-cta {
+                @apply mt-2 flex items-center justify-center gap-2 bg-white font-semibold text-black hover:bg-white hover:text-black;
             }
         }
     }
