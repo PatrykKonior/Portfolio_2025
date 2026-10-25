@@ -8,14 +8,19 @@ const navLinks = [
     link: "#experience",
   },
   {
-    name: "Skills",
-    link: "#skills",
-  },
-  {
-    name: "Testimonials",
-    link: "#testimonials",
+    name: "Services",
+    link: "#services",
   },
 ];
+
+const contactInfo = {
+  email: "patrykkonior4@gmail.com",
+  linkedin: "https://www.linkedin.com/in/patrykkonior/",
+  github: "https://github.com/PatrykKonior",
+  location: "Chorzów, Poland",
+  workMode: "Remote or on-site",
+  languages: "English B2/C1 · German A2",
+};
 
 const words = [
   { text: "Ideas", imgPath: "/images/ideas.svg" },
@@ -29,86 +34,155 @@ const words = [
 ];
 
 const counterItems = [
-  { value: 15, suffix: "+", label: "Years of Experience" },
-  { value: 200, suffix: "+", label: "Satisfied Clients" },
-  { value: 108, suffix: "+", label: "Completed Projects" },
-  { value: 90, suffix: "%", label: "Client Retention Rate" },
+  { value: 3, suffix: "+", label: "Years of Commercial Experience" },
+  { value: 3, suffix: "", label: "Backend Ecosystems: Elixir, Node.js & .NET" },
+  { value: 3, suffix: "", label: "Frontend Frameworks: React, Svelte & LiveView" },
+  { value: 45, suffix: "+", label: "Technologies & Tools Used" },
 ];
 
 const logoIconsList = [
-  {
-    imgPath: "/images/logos/company-logo-1.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-2.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-3.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-4.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-5.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-6.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-7.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-8.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-9.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-10.png",
-  },
-  {
-    imgPath: "/images/logos/company-logo-11.png",
-  },
+  { name: "Elixir", imgPath: "/images/tech/elixir.svg" },
+  { name: "Phoenix", imgPath: "/images/tech/phoenix.svg" },
+  { name: "React", imgPath: "/images/tech/react.svg" },
+  { name: "TypeScript", imgPath: "/images/tech/typescript.svg" },
+  { name: "Svelte", imgPath: "/images/tech/svelte.svg" },
+  { name: "Node.js", imgPath: "/images/tech/nodejs.svg" },
+  { name: "C#", imgPath: "/images/tech/csharp.svg" },
+  { name: ".NET", imgPath: "/images/tech/dotnet.svg" },
+  { name: "PostgreSQL", imgPath: "/images/tech/postgresql.svg" },
+  { name: "SQL Server", imgPath: "/images/tech/microsoftsqlserver.svg" },
+  { name: "Docker", imgPath: "/images/tech/docker.svg" },
+  { name: "Tailwind CSS", imgPath: "/images/tech/tailwindcss.svg" },
 ];
 
 const abilities = [
   {
     imgPath: "/images/seo.png",
-    title: "Quality Focus",
-    desc: "Delivering high-quality results while maintaining attention to every detail.",
+    title: "Full-stack Ownership",
+    desc: "I take features all the way from database design and APIs to a polished, responsive interface.",
   },
   {
     imgPath: "/images/chat.png",
-    title: "Reliable Communication",
-    desc: "Keeping you updated at every step to ensure transparency and clarity.",
+    title: "Direct Client Communication",
+    desc: "I run meetings, gather requirements and handle support tickets myself, so nothing gets lost between business and code.",
   },
   {
     imgPath: "/images/time.png",
-    title: "On-Time Delivery",
-    desc: "Making sure projects are completed on schedule, with quality & attention to detail.",
+    title: "Production-Ready Delivery",
+    desc: "Tested code, Docker deployments and CI/CD pipelines, so new features reach production safely.",
   },
 ];
 
-const techStackImgs = [
+const projects = [
   {
-    name: "React Developer",
-    imgPath: "/images/logos/react.png",
+    title: "Design Office Management Suite",
+    desc: "One business domain, three applications: a .NET Core REST API with Entity Framework over SQL Server, a WPF desktop app built with MVVM, and a React Native mobile app for clients, projects, invoices, tasks and time tracking.",
+    tags: ["C#", ".NET Core", "Entity Framework", "WPF / MVVM", "React Native", "TypeScript", "SQL Server"],
+    architecture: {
+      clients: [
+        { name: "React Native", detail: "Mobile app", icon: "/images/tech/react.svg" },
+        { name: "WPF", detail: "Desktop app", icon: "/images/tech/csharp.svg" },
+      ],
+      server: { name: ".NET Core API", detail: "15 REST controllers", icon: "/images/tech/dotnet.svg" },
+      database: { name: "SQL Server", detail: "Entity Framework", icon: "/images/tech/microsoftsqlserver.svg" },
+    },
+    links: [
+      { label: "API", url: "https://github.com/PatrykKonior/MVVM_REST_API_CRUD" },
+      { label: "Desktop", url: "https://github.com/PatrykKonior/MVVM_Office" },
+      { label: "Mobile", url: "https://github.com/PatrykKonior/ReacNative_MVVM_Company" },
+    ],
   },
   {
-    name: "Python Developer",
-    imgPath: "/images/logos/python.svg",
+    title: "Pizzeria Management Platform",
+    desc: "React dashboard for menu, orders, warehouse, staff schedule and documents, backed by a .NET REST API.",
+    tags: ["React", "React Router", "Bootstrap", "C#", ".NET Core", "SQL Server"],
+    architecture: {
+      clients: [{ name: "React", detail: "Admin dashboard", icon: "/images/tech/react.svg" }],
+      server: { name: ".NET Core API", detail: "13 REST controllers", icon: "/images/tech/dotnet.svg" },
+      database: { name: "SQL Server", detail: "Entity Framework", icon: "/images/tech/microsoftsqlserver.svg" },
+    },
+    links: [
+      { label: "Frontend", url: "https://github.com/PatrykKonior/ReactAppPizza_Studia" },
+      { label: "API", url: "https://github.com/PatrykKonior/MVVM_PIZZA_REST_API_CRUD" },
+    ],
   },
   {
-    name: "Backend Developer",
-    imgPath: "/images/logos/node.png",
+    title: "Pento: Phoenix LiveView Store",
+    desc: "Real-time product catalog with user accounts, surveys, ratings and a live admin dashboard.",
+    tags: ["Elixir", "Phoenix", "LiveView", "Ecto", "PostgreSQL"],
+    architecture: {
+      clients: [{ name: "LiveView", detail: "Real-time UI", icon: "/images/tech/phoenix.svg" }],
+      server: { name: "Phoenix", detail: "Elixir / OTP", icon: "/images/tech/elixir.svg" },
+      database: { name: "PostgreSQL", detail: "Ecto", icon: "/images/tech/postgresql.svg" },
+    },
+    links: [{ label: "Code", url: "https://github.com/PatrykKonior/PENTO_APPS" }],
+  },
+];
+
+const services = [
+  {
+    title: "Web Applications",
+    desc: "Custom web apps, CRMs and internal tools with React, Svelte or Phoenix LiveView, from the first Figma sketch to production.",
+    icons: ["/images/tech/react.svg", "/images/tech/svelte.svg", "/images/tech/phoenix.svg"],
   },
   {
-    name: "Interactive Developer",
-    imgPath: "/images/logos/three.png",
+    title: "Backend & Real-time APIs",
+    desc: "REST APIs and live features over WebSockets, built with Elixir, Node.js or .NET on top of PostgreSQL, SQL Server or MongoDB.",
+    icons: ["/images/tech/elixir.svg", "/images/tech/nodejs.svg", "/images/tech/dotnet.svg"],
   },
   {
-    name: "Project Manager",
-    imgPath: "/images/logos/git.svg",
+    title: "Deployment & DevOps",
+    desc: "Dockerized apps on Linux and Nginx, automated CI/CD pipelines and file storage on S3.",
+    icons: ["/images/tech/docker.svg", "/images/tech/linux.svg", "/images/tech/git.svg"],
+  },
+  {
+    title: "Performance & SEO",
+    desc: "Faster pages, better accessibility and a clean structure that search engines understand.",
+    icons: ["/images/tech/html5.svg", "/images/tech/tailwindcss.svg", "/images/tech/typescript.svg"],
+  },
+];
+
+const expCards = [
+  {
+    company: "LTR Labs sp. z o.o.",
+    logoText: "LTR",
+    summary: "Developing and maintaining three products in parallel: an EdTech learning platform, a CRM system and an internal company tool.",
+    title: "Full-stack Developer",
+    date: "January 2026 - Present · Remote",
+    responsibilities: [
+      "Building web interfaces in TypeScript, JavaScript and Svelte with Tailwind CSS, on an Elixir / Phoenix LiveView backend.",
+      "Designing and implementing REST APIs and real-time communication over WebSockets.",
+      "Containerizing and deploying to production with Docker, Nginx and Linux, with automated CI/CD and file storage on S3.",
+      "Optimizing applications for SEO: structure, performance and accessibility.",
+      "Working directly with clients: running meetings, gathering requirements and handling support tickets.",
+    ],
+    stack: ["Elixir", "Phoenix", "LiveView", "Ecto", "Oban", "OTP / GenServer", "TypeScript", "JavaScript", "Svelte", "Tailwind CSS", "PostgreSQL", "Docker", "Nginx", "Linux", "S3", "CI/CD"],
+  },
+  {
+    company: "Medas sp. z o.o.",
+    logoText: "M",
+    summary: "Promoted after a year on the frontend to take ownership of features across the whole stack.",
+    title: "Junior Fullstack Developer",
+    date: "March 2025 - December 2025 · Hybrid",
+    responsibilities: [
+      "Implementing REST APIs and integrating Microsoft SQL Server and MongoDB with JWT and OAuth authorization.",
+      "Writing automation and integration scripts in T-SQL, Python and PowerShell.",
+      "Refactoring and optimizing existing code and application logic.",
+    ],
+    stack: ["Node.js", "Express.js", "TypeScript", "REST API", "JWT / OAuth", "SQL Server", "T-SQL", "MongoDB", "Python", "PowerShell", "Windows Server", "Jest", "React Testing Library"],
+  },
+  {
+    company: "Medas sp. z o.o.",
+    logoText: "M",
+    summary: "Started my commercial career building web applications for clients in React.",
+    title: "Junior Frontend Developer",
+    date: "March 2024 - March 2025 · On-site",
+    responsibilities: [
+      "Building and developing web applications in React with JavaScript and TypeScript.",
+      "Working with clients on requirements and designing new applications from scratch in Figma.",
+      "Creating responsive interfaces with Tailwind CSS, bundled with Webpack.",
+    ],
+    stack: ["React", "JavaScript", "TypeScript", "Tailwind CSS", "CSS", "Webpack", "Figma", "GitHub"],
   },
 ];
 
@@ -145,134 +219,15 @@ const techStackIcons = [
   },
 ];
 
-const expCards = [
-  {
-    review: "Adrian brought creativity and technical expertise to the team, significantly improving our frontend performance. His work has been invaluable in delivering faster experiences.",
-    imgPath: "/images/exp1.png",
-    logoPath: "/images/logo1.png",
-    title: "Frontend Developer",
-    date: "January 2023 - Present",
-    responsibilities: [
-      "Developed and maintained user-facing features for the Hostinger website.",
-      "Collaborated closely with UI/UX designers to ensure seamless user experiences.",
-      "Optimized web applications for maximum speed and scalability.",
-    ],
-  },
-  {
-    review: "Adrian’s contributions to Docker's web applications have been outstanding. He approaches challenges with a problem-solving mindset.",
-    imgPath: "/images/exp2.png",
-    logoPath: "/images/logo2.png",
-    title: "Full Stack Developer",
-    date: "June 2020 - December 2023",
-    responsibilities: [
-      "Led the development of Docker's web applications, focusing on scalability.",
-      "Worked with backend engineers to integrate APIs seamlessly with the frontend.",
-      "Contributed to open-source projects that were used with the Docker ecosystem.",
-    ],
-  },
-  {
-    review: "Adrian’s work on Appwrite’s mobile app brought a high level of quality and efficiency. He delivered solutions that enhanced our mobile experience & meet our product goals.",
-    imgPath: "/images/exp3.png",
-    logoPath: "/images/logo3.png",
-    title: "React Native Developer",
-    date: "March 2019 - May 2020",
-    responsibilities: [
-      "Built cross-platform mobile apps using React Native, integrating with Appwrite's backend services.",
-      "Improved app performance and user experience through code optimization and testing.",
-      "Coordinated with the product team to implement features based on feedback.",
-    ],
-  },
-];
-
-const expLogos = [
-  {
-    name: "logo1",
-    imgPath: "/images/logo1.png",
-  },
-  {
-    name: "logo2",
-    imgPath: "/images/logo2.png",
-  },
-  {
-    name: "logo3",
-    imgPath: "/images/logo3.png",
-  },
-];
-
-const testimonials = [
-  {
-    name: "Esther Howard",
-    mentions: "@estherhoward",
-    review:
-      "I can’t say enough good things about Adrian. He was able to take our complex project requirements and turn them into a seamless, functional website. His problem-solving abilities are outstanding.",
-    imgPath: "/images/client1.png",
-  },
-  {
-    name: "Wade Warren",
-    mentions: "@wadewarren",
-    review:
-      "Working with Adrian was a fantastic experience. He transformed our outdated website into a modern, user-friendly platform. His attention to detail and commitment to quality are unmatched. Highly recommend him for any web dev projects.",
-    imgPath: "/images/client3.png",
-  },
-  {
-    name: "Guy Hawkins",
-    mentions: "@guyhawkins",
-    review:
-      "Collaborating with Adrian was an absolute pleasure. His professionalism, promptness, and dedication to delivering exceptional results were evident throughout our project. Adrian's enthusiasm for every facet of development truly stands out. If you're seeking to elevate your website and elevate your brand, Adrian is the ideal partner.",
-    imgPath: "/images/client2.png",
-  },
-  {
-    name: "Marvin McKinney",
-    mentions: "@marvinmckinney",
-    review:
-      "Adrian was a pleasure to work with. He turned our outdated website into a fresh, intuitive platform that’s both modern and easy to navigate. Fantastic work overall.",
-    imgPath: "/images/client5.png",
-  },
-  {
-    name: "Floyd Miles",
-    mentions: "@floydmiles",
-    review:
-      "Adrian’s expertise in web development is truly impressive. He delivered a robust and scalable solution for our e-commerce site, and our online sales have significantly increased since the launch. He’s a true professional!",
-    imgPath: "/images/client4.png",
-  },
-  {
-    name: "Albert Flores",
-    mentions: "@albertflores",
-    review:
-      "Adrian was a pleasure to work with. He understood our requirements perfectly and delivered a website that exceeded our expectations. His skills in both frontend and backend dev are top-notch.",
-    imgPath: "/images/client6.png",
-  },
-];
-
-const socialImgs = [
-  {
-    name: "insta",
-    imgPath: "/images/insta.png",
-  },
-  {
-    name: "fb",
-    imgPath: "/images/fb.png",
-  },
-  {
-    name: "x",
-    imgPath: "/images/x.png",
-  },
-  {
-    name: "linkedin",
-    imgPath: "/images/linkedin.png",
-  },
-];
-
 export {
   words,
   abilities,
   logoIconsList,
   counterItems,
   expCards,
-  expLogos,
-  testimonials,
-  socialImgs,
+  projects,
+  services,
+  contactInfo,
   techStackIcons,
-  techStackImgs,
   navLinks,
 };
