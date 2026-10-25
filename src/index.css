@@ -167,7 +167,7 @@ section {
             .image-wrapper {
                 @apply xl:h-[70vh] md:h-[50vh] h-96 relative;
 
-                img {
+                & > img {
                     @apply w-full h-full object-cover rounded-xl absolute inset-0;
                 }
             }
@@ -192,7 +192,7 @@ section {
                 @apply xl:h-[37vh] md:h-52 lg:h-72 h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0;
             }
 
-            img {
+            .image-wrapper > img {
                 @apply w-full h-full object-contain rounded-xl;
             }
 
@@ -422,8 +422,70 @@ section {
 }
 /* marquee end */
 
+/* project architecture diagrams */
+.arch-panel {
+    @apply absolute inset-0 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 border border-black-50;
+    background:
+        radial-gradient(60% 45% at 50% 0%, rgba(98, 224, 255, 0.12), transparent 70%),
+        radial-gradient(55% 50% at 50% 100%, rgba(109, 69, 206, 0.2), transparent 70%),
+        var(--color-black-100);
+}
+
+.arch-node {
+    @apply flex items-center gap-3 rounded-xl border border-black-50 bg-black-200/60 backdrop-blur px-5 py-3 text-left md:min-w-56;
+
+    &.compact {
+        @apply px-3 py-2 gap-2 md:min-w-0 text-sm;
+    }
+}
+
+.arch-link {
+    position: relative;
+    width: 2px;
+    background: linear-gradient(180deg, #62e0ff 0%, #52aeff 40%, #6d45ce 100%);
+    opacity: 0.7;
+}
+
+.arch-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 6px;
+    height: 6px;
+    border-radius: 9999px;
+    background: #62e0ff;
+    box-shadow: 0 0 10px #62e0ff;
+    transform: translateX(-50%);
+    animation: arch-flow 2.4s ease-in-out infinite;
+}
+
+@keyframes arch-flow {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+    20%,
+    80% {
+        opacity: 1;
+    }
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+.stack-chip {
+    @apply text-sm text-white-50 bg-black-200 border border-black-50 rounded-full px-3 py-1;
+}
+
+.project-link {
+    @apply text-sm font-medium text-white border border-black-50 bg-black-100 rounded-lg px-4 py-2 transition-colors duration-300 hover:bg-black-200 hover:border-blue-50;
+}
+
 @media (prefers-reduced-motion: reduce) {
-    .marquee-box {
+    .marquee-box,
+    .arch-link::after {
         animation: none;
     }
 }
