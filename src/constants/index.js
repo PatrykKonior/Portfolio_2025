@@ -123,7 +123,7 @@ const projects = [
 const services = [
   {
     title: "Web Applications",
-    desc: "Custom web apps, CRMs and internal tools with React, Svelte or Phoenix LiveView, from the first Figma sketch to production.",
+    desc: "Custom web apps, CRMs and internal tools built with React, Svelte or Phoenix LiveView, from the first Figma sketch to production.",
     icons: ["/images/tech/react.svg", "/images/tech/svelte.svg", "/images/tech/phoenix.svg"],
   },
   {
@@ -133,7 +133,7 @@ const services = [
   },
   {
     title: "Deployment & DevOps",
-    desc: "Dockerized apps on Linux and Nginx, automated CI/CD pipelines and file storage on S3.",
+    desc: "Dockerized apps served by Nginx on Linux servers, automated CI/CD pipelines and file storage on Amazon S3.",
     icons: ["/images/tech/docker.svg", "/images/tech/linux.svg", "/images/tech/git.svg"],
   },
   {
@@ -149,7 +149,7 @@ const expCards = [
     logoText: "LTR",
     summary: "Developing and maintaining three products in parallel: an EdTech learning platform, a CRM system and an internal company tool.",
     title: "Full-stack Developer",
-    date: "January 2026 - Present · Remote",
+    date: "January 2026 – Present · Remote",
     responsibilities: [
       "Building web interfaces in TypeScript, JavaScript and Svelte with Tailwind CSS, on an Elixir / Phoenix LiveView backend.",
       "Designing and implementing REST APIs and real-time communication over WebSockets.",
@@ -164,9 +164,9 @@ const expCards = [
     logoText: "M",
     summary: "Promoted after a year on the frontend to take ownership of features across the whole stack.",
     title: "Junior Fullstack Developer",
-    date: "March 2025 - December 2025 · Hybrid",
+    date: "March 2025 – December 2025 · Hybrid",
     responsibilities: [
-      "Implementing REST APIs and integrating Microsoft SQL Server and MongoDB with JWT and OAuth authorization.",
+      "Building REST APIs secured with JWT and OAuth, backed by Microsoft SQL Server and MongoDB.",
       "Writing automation and integration scripts in T-SQL, Python and PowerShell.",
       "Refactoring and optimizing existing code and application logic.",
     ],
@@ -177,11 +177,11 @@ const expCards = [
     logoText: "M",
     summary: "Started my commercial career building web applications for clients in React.",
     title: "Junior Frontend Developer",
-    date: "March 2024 - March 2025 · On-site",
+    date: "March 2024 – March 2025 · On-site",
     responsibilities: [
-      "Building and developing web applications in React with JavaScript and TypeScript.",
-      "Working with clients on requirements and designing new applications from scratch in Figma.",
-      "Creating responsive interfaces with Tailwind CSS, bundled with Webpack.",
+      "Building and maintaining web applications in React with JavaScript and TypeScript.",
+      "Gathering requirements with clients and designing new applications from scratch in Figma.",
+      "Creating responsive interfaces with Tailwind CSS and bundling them with Webpack.",
     ],
     stack: ["React", "JavaScript", "TypeScript", "Tailwind CSS", "CSS", "Webpack", "Figma", "GitHub"],
   },
