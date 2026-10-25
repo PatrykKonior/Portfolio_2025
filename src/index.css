@@ -278,47 +278,84 @@ section {
         @apply flex justify-center items-center w-52 h-60 relative;
     }
 
-    form {
+    .contact-panel {
+        @apply relative grid xl:grid-cols-12 grid-cols-1 xl:gap-16 gap-12 rounded-3xl border border-black-50 md:p-14 p-6 overflow-hidden;
+        background:
+            radial-gradient(40% 50% at 0% 0%, rgba(98, 224, 255, 0.1), transparent 70%),
+            radial-gradient(45% 55% at 100% 100%, rgba(109, 69, 206, 0.18), transparent 70%),
+            var(--color-black-100);
+    }
+
+    .availability {
+        @apply inline-flex items-center gap-3 self-start rounded-full border border-black-50 bg-black-200/60 px-4 py-2 text-sm text-white-50;
+    }
+
+    .availability-dot {
+        @apply relative size-2.5 rounded-full bg-emerald-400;
+
+        &::after {
+            content: "";
+            @apply absolute inset-0 rounded-full bg-emerald-400 animate-ping;
+        }
+    }
+
+    .contact-link {
+        @apply flex items-center gap-4 rounded-2xl border border-black-50 bg-black-100/80 px-4 py-3 transition-colors duration-300 hover:border-blue-50/50 hover:bg-black-200/50;
+    }
+
+    .contact-link-icon {
+        @apply flex items-center justify-center size-11 shrink-0 rounded-xl bg-black-200 text-white-50;
+    }
+
+    .copy-button {
+        @apply ms-auto flex items-center gap-1.5 rounded-lg border border-black-50 px-3 py-1.5 text-xs text-white-50 cursor-pointer transition-colors hover:bg-black-200 hover:text-white;
+    }
+
+    .contact-form {
+        @apply flex flex-col gap-5 rounded-2xl border border-black-50 bg-black/40 md:p-8 p-5;
+
         label {
-            @apply block text-white-50 mb-2;
+            @apply block text-sm text-white-50 mb-2;
         }
 
         input,
         textarea {
-            @apply w-full px-4 py-4 md:text-base text-sm placeholder:text-blue-50 bg-blue-100 rounded-md;
+            @apply w-full rounded-xl border border-black-50 bg-black-200/50 px-4 py-3.5 md:text-base text-sm text-white placeholder:text-blue-50/70 outline-none transition-colors duration-300 focus:border-[#52aeff] focus:bg-black-200;
         }
 
-        a {
-            @apply w-full py-4 bg-white text-black font-semibold rounded-md flex justify-center items-center gap-2;
-
-            img {
-                @apply inline-block;
-            }
+        textarea {
+            @apply resize-none;
         }
     }
 
+    .send-button {
+        @apply relative flex items-center justify-center gap-2 w-full rounded-xl py-4 font-semibold text-black cursor-pointer transition-opacity disabled:opacity-60 disabled:cursor-wait;
+        background: linear-gradient(90deg, #62e0ff, #52aeff 40%, #a78bfa);
+    }
+
     .footer {
-        @apply my-10 md:mt-20 mt-10 text-white-50 px-5 md:px-20 xl:px-20 flex items-center justify-center;
+        @apply mt-24 px-5 md:px-20 pb-10 text-white-50;
+    }
 
-        .footer-container {
-            @apply grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-0 w-full;
-        }
+    .footer-line {
+        @apply h-px w-full mb-12;
+        background: linear-gradient(90deg, transparent, #62e0ff 20%, #52aeff 40%, #fd5c79 65%, #6d45ce 85%, transparent);
+    }
 
-        p {
-            @apply text-center md:text-start;
-        }
+    .footer-main {
+        @apply grid md:grid-cols-3 grid-cols-1 items-center gap-8 md:text-start text-center;
+    }
 
-        .socials {
-            @apply flex items-center justify-center gap-5;
+    .footer-nav-link {
+        @apply text-sm text-white-50 transition-colors hover:text-white;
+    }
 
-            .icon {
-                @apply border border-black-50 bg-black-100 flex justify-center items-center rounded-xl size-10 md:size-12 cursor-pointer transition-all duration-500 hover:bg-black-50;
-            }
+    .footer-social {
+        @apply flex items-center justify-center size-11 rounded-xl border border-black-50 bg-black-100 text-white-50 transition-all duration-300 hover:-translate-y-1 hover:border-blue-50/50 hover:text-white;
+    }
 
-            img {
-                @apply inline-block;
-            }
-        }
+    .footer-bottom {
+        @apply mt-12 pt-6 border-t border-black-50 flex md:flex-row flex-col items-center justify-between gap-3 text-sm;
     }
 }
 
@@ -485,7 +522,8 @@ section {
 
 @media (prefers-reduced-motion: reduce) {
     .marquee-box,
-    .arch-link::after {
+    .arch-link::after,
+    .availability-dot::after {
         animation: none;
     }
 }
