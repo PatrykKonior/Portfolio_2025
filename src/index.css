@@ -210,14 +210,10 @@ section {
         }
 
         .first-project-wrapper {
-            @apply h-full flex flex-col justify-between xl:w-[60%];
+            @apply flex flex-col xl:w-[60%];
 
             .image-wrapper {
-                @apply xl:h-[70vh] md:h-[50vh] h-96 relative;
-
-                & > img {
-                    @apply w-full h-full object-cover rounded-xl absolute inset-0;
-                }
+                @apply flex xl:flex-1 xl:min-h-[45vh] md:min-h-[50vh] min-h-96;
             }
 
             .text-content {
@@ -236,12 +232,16 @@ section {
         .project-list-wrapper {
             @apply flex md:flex-row flex-col xl:flex-col gap-10 xl:w-[40%];
 
-            .image-wrapper {
-                @apply xl:h-[37vh] md:h-52 lg:h-72 h-64 relative rounded-xl xl:px-5 2xl:px-12 py-0;
+            .project {
+                @apply flex flex-1 flex-col gap-4;
+
+                & > :last-child {
+                    @apply mt-auto;
+                }
             }
 
-            .image-wrapper > img {
-                @apply w-full h-full object-contain rounded-xl;
+            .image-wrapper {
+                @apply flex xl:flex-1 min-h-80;
             }
 
             h2 {
@@ -509,7 +509,7 @@ section {
 
 /* project architecture diagrams */
 .arch-panel {
-    @apply absolute inset-0 rounded-xl overflow-hidden flex flex-col items-center justify-center p-6 border border-black-50;
+    @apply relative flex-1 rounded-xl overflow-hidden flex flex-col items-center justify-center md:p-8 px-3 py-8 border border-black-50;
     background:
         radial-gradient(60% 45% at 50% 0%, rgba(98, 224, 255, 0.12), transparent 70%),
         radial-gradient(55% 50% at 50% 100%, rgba(109, 69, 206, 0.2), transparent 70%),
@@ -522,10 +522,15 @@ section {
     &.compact {
         @apply px-3 py-2 gap-2 md:min-w-0 text-sm;
     }
+
+    &.dense {
+        @apply flex-1 md:px-4 px-2.5 gap-2.5 md:min-w-0 md:text-base text-sm max-md:flex-col max-md:justify-center max-md:gap-1.5 max-md:text-center;
+    }
 }
 
 .arch-link {
     position: relative;
+    flex-shrink: 0;
     width: 2px;
     background: linear-gradient(180deg, #62e0ff 0%, #52aeff 40%, #6d45ce 100%);
     opacity: 0.7;

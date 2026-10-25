@@ -76,29 +76,30 @@ const abilities = [
 const projects = [
   {
     title: "Design Office Management Suite",
-    desc: "One business domain, three applications: a .NET Core REST API with Entity Framework over SQL Server, a WPF desktop app built with MVVM, and a React Native mobile app for clients, projects, invoices, tasks and time tracking.",
-    tags: ["C#", ".NET Core", "Entity Framework", "WPF / MVVM", "React Native", "TypeScript", "SQL Server"],
+    desc: "A system for running a design office: clients, projects, invoices, payments, tasks and time tracking. One .NET Core REST API serves three apps: a web app and a mobile app built from a single React Native (Expo) codebase, and a WPF desktop app built with MVVM.",
+    tags: ["C#", ".NET Core", "Entity Framework", "WPF / MVVM", "React Native", "Expo", "TypeScript", "SQL Server"],
     architecture: {
       clients: [
-        { name: "React Native", detail: "Mobile app", icon: "/images/tech/react.svg" },
-        { name: "WPF", detail: "Desktop app", icon: "/images/tech/csharp.svg" },
+        { name: "Web app", detail: "React Native Web", icon: "/images/tech/react.svg" },
+        { name: "Mobile app", detail: "React Native", icon: "/images/tech/react.svg" },
+        { name: "Desktop app", detail: "WPF / MVVM", icon: "/images/tech/csharp.svg" },
       ],
-      server: { name: ".NET Core API", detail: "15 REST controllers", icon: "/images/tech/dotnet.svg" },
+      server: { name: ".NET Core", detail: "REST API", icon: "/images/tech/dotnet.svg" },
       database: { name: "SQL Server", detail: "Entity Framework", icon: "/images/tech/microsoftsqlserver.svg" },
     },
     links: [
       { label: "API", url: "https://github.com/PatrykKonior/MVVM_REST_API_CRUD" },
+      { label: "Web & Mobile", url: "https://github.com/PatrykKonior/ReacNative_MVVM_Company" },
       { label: "Desktop", url: "https://github.com/PatrykKonior/MVVM_Office" },
-      { label: "Mobile", url: "https://github.com/PatrykKonior/ReacNative_MVVM_Company" },
     ],
   },
   {
-    title: "Pizzeria Management Platform",
-    desc: "React dashboard for menu, orders, warehouse, staff schedule and documents, backed by a .NET REST API.",
+    title: "Pizza Restaurant Admin Dashboard",
+    desc: "A React dashboard for managing the menu, orders, inventory, staff schedules and documents, backed by a .NET REST API.",
     tags: ["React", "React Router", "Bootstrap", "C#", ".NET Core", "SQL Server"],
     architecture: {
-      clients: [{ name: "React", detail: "Admin dashboard", icon: "/images/tech/react.svg" }],
-      server: { name: ".NET Core API", detail: "13 REST controllers", icon: "/images/tech/dotnet.svg" },
+      clients: [{ name: "Web app", detail: "React", icon: "/images/tech/react.svg" }],
+      server: { name: ".NET Core", detail: "REST API", icon: "/images/tech/dotnet.svg" },
       database: { name: "SQL Server", detail: "Entity Framework", icon: "/images/tech/microsoftsqlserver.svg" },
     },
     links: [
@@ -108,7 +109,7 @@ const projects = [
   },
   {
     title: "Pento: Phoenix LiveView Store",
-    desc: "Real-time product catalog with user accounts, surveys, ratings and a live admin dashboard.",
+    desc: "An online store built with Phoenix LiveView. Users sign up, browse and search products by SKU, rate them and fill in a demographic survey. The admin dashboard turns ratings into interactive charts filtered by age group and gender, all without page reloads.",
     tags: ["Elixir", "Phoenix", "LiveView", "Ecto", "PostgreSQL"],
     architecture: {
       clients: [{ name: "LiveView", detail: "Real-time UI", icon: "/images/tech/phoenix.svg" }],

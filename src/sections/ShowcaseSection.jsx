@@ -33,43 +33,51 @@ const ProjectTags = ({ tags }) => (
 
 const ShowcaseSection = () => {
     const sectionRef = useRef(null);
-    const project1Ref = useRef(null);
-    const project2Ref = useRef(null);
-    const project3Ref = useRef(null);
     const [mainProject, ...otherProjects] = projects;
 
     useGSAP(() => {
-        gsap.fromTo(
-            sectionRef.current,
-            { opacity: 0 },
-            { opacity: 1, duration: 1.5 });
+        const isDesktop = window.matchMedia("(min-width: 1280px)").matches;
 
-        const cards = [project1Ref.current, project2Ref.current, project3Ref.current];
+        gsap.utils.toArray(".showcase-card").forEach((card, index) => {
+            const fromLeft = index === 0 || !isDesktop;
 
-        cards.forEach((card, index) => {
-            gsap.fromTo(card,
-                {
-                    y: 50,
-                    opacity: 0,
+            const timeline = gsap.timeline({
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 85%",
                 },
-                {
-                    y: 0,
-                    opacity: 1,
+            });
+
+            timeline
+                .from(card, {
+                    x: fromLeft ? -100 : 100,
+                    opacity: 0,
                     duration: 1,
-                    delay: 0.3 * (index + 1),
-                    scrollTrigger: {
-                        trigger: card,
-                        start: 'top bottom-=100'
-                    }
+                    ease: "power3.out",
+                    delay: isDesktop ? index * 0.15 : 0,
                 })
-        })
-    }, []);
+                .from(card.querySelectorAll(".arch-node"), {
+                    y: 20,
+                    scale: 0.85,
+                    opacity: 0,
+                    duration: 0.45,
+                    ease: "back.out(2)",
+                    stagger: 0.1,
+                }, "-=0.5")
+                .from(card.querySelectorAll(".stack-chip"), {
+                    y: 12,
+                    opacity: 0,
+                    duration: 0.3,
+                    stagger: 0.04,
+                }, "-=0.3");
+        });
+    }, {scope: sectionRef});
 
     return (
         <section id="work" ref={sectionRef} className="app-showcase">
             <div className="w-full">
                 <div className="showcaselayout">
-                    <div className="first-project-wrapper" ref={project1Ref}>
+                    <div className="showcase-card first-project-wrapper">
                         <div className="image-wrapper">
                             <ArchitectureDiagram architecture={mainProject.architecture} />
                         </div>
@@ -81,13 +89,9 @@ const ShowcaseSection = () => {
                         </div>
                     </div>
 
-                    <div className="project-list-wrapper overflow-hidden">
-                        {otherProjects.map((project, index) => (
-                            <div
-                                key={project.title}
-                                className="project flex flex-col gap-4"
-                                ref={index === 0 ? project2Ref : project3Ref}
-                            >
+                    <div className="project-list-wrapper">
+                        {otherProjects.map((project) => (
+                            <div key={project.title} className="showcase-card project">
                                 <div className="image-wrapper">
                                     <ArchitectureDiagram architecture={project.architecture} compact />
                                 </div>
