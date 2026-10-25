@@ -1,70 +1,64 @@
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-import TitleHeader from "../components/TitleHeader.jsx";
-import GlowCard from "../components/GlowCard.jsx";
+import { useRef } from "react";
+import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { services } from "../constants/index.js";
-
-gsap.registerPlugin(ScrollTrigger);
+import SectionHeading from "../components/SectionHeading.jsx";
 
 const Services = () => {
+    const ref = useRef(null);
+
     useGSAP(() => {
-        gsap.from(".service-card", {
-            y: 60,
-            opacity: 0,
-            duration: 0.9,
-            ease: "power3.out",
-            stagger: 0.15,
-            scrollTrigger: {
-                trigger: "#services",
-                start: "top 70%",
-            },
+        if (!motionOK()) return;
+        const cards = gsap.utils.toArray(".service-card");
+
+        // Each sticky card recedes as the next one slides over it.
+        cards.slice(0, -1).forEach((card, index) => {
+            gsap.to(card.querySelector(".service-card-inner"), {
+                scale: 0.92,
+                filter: "brightness(0.55)",
+                rotateX: -4,
+                ease: "none",
+                scrollTrigger: { trigger: cards[index + 1], start: "top 65%", end: "top 15%", scrub: true },
+            });
         });
 
-        gsap.from(".service-icon", {
-            scale: 0,
-            rotate: -45,
-            opacity: 0,
-            duration: 0.5,
-            ease: "back.out(2.5)",
-            stagger: 0.06,
-            delay: 0.4,
-            scrollTrigger: {
-                trigger: "#services",
-                start: "top 70%",
-            },
+        cards.forEach((card) => {
+            gsap.from(card.querySelectorAll(".service-icon"), {
+                scale: 0,
+                rotate: -30,
+                duration: 0.9,
+                stagger: 0.07,
+                ease: "back.out(2)",
+                scrollTrigger: { trigger: card, start: "top 70%" },
+            });
         });
-    }, []);
+    }, { scope: ref });
 
     return (
-        <section id="services" className="flex-center section-padding">
-            <div className="w-full h-full md:px-10 px-5">
-                <TitleHeader
-                    title="What I Can Build for You"
-                    sub="🛠️ Services for companies and clients"
-                />
+        <section id="services" ref={ref} className="services container-x section-space">
+            <SectionHeading index="03" label="Services" title="What I can <em>build</em> for you" />
 
-                <div className="grid md:grid-cols-2 grid-cols-1 gap-x-5 mt-16">
-                    {services.map((service, index) => (
-                        <GlowCard key={service.title} index={index} className="service-card">
-                            <div className="flex flex-col gap-5 h-full">
-                                <div className="flex gap-3">
+            <div className="service-stack">
+                {services.map((service, index) => (
+                    <div key={service.title} className="service-card" style={{ "--i": index }}>
+                        <article className={`service-card-inner tone-${index % 4}`}>
+                            <div className="service-card-top">
+                                <span className="service-number">0{index + 1}</span>
+                                <div className="flex gap-2">
                                     {service.icons.map((icon) => (
-                                        <div
-                                            key={icon}
-                                            className="service-icon size-14 rounded-xl border border-black-50 bg-black-200 flex-center"
-                                        >
-                                            <img src={icon} alt="" className="size-8" />
-                                        </div>
+                                        <span key={icon} className="service-icon"><img src={icon} alt="" /></span>
                                     ))}
                                 </div>
-                                <h3 className="font-semibold md:text-3xl text-2xl">{service.title}</h3>
-                                <p className="text-white-50 text-lg">{service.desc}</p>
                             </div>
-                        </GlowCard>
-                    ))}
-                </div>
+                            <div className="service-card-body">
+                                <h3>{service.title}</h3>
+                                <p>{service.desc}</p>
+                                <ul className="service-points">
+                                    {service.points.map((point) => <li key={point}>{point}</li>)}
+                                </ul>
+                            </div>
+                        </article>
+                    </div>
+                ))}
             </div>
         </section>
     );

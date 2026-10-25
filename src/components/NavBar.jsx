@@ -1,153 +1,123 @@
-import React, {useEffect, useRef, useState} from 'react'
-import gsap from "gsap";
-import {ScrollTrigger} from "gsap/ScrollTrigger";
-import {useGSAP} from "@gsap/react";
-import {navLinks} from "../constants/index.js";
-import {ArrowUpRightIcon, CloseIcon, MenuIcon} from "./Icons.jsx";
+import { useEffect, useRef, useState } from "react";
+import { gsap, ScrollTrigger, useGSAP, motionOK } from "../lib/motion.js";
+import { navLinks, contactInfo } from "../constants/index.js";
+import useLocalTime from "../hooks/useLocalTime.js";
+import Magnetic from "./Magnetic.jsx";
 
-gsap.registerPlugin(ScrollTrigger);
+const RollText = ({ children }) => (
+    <span className="roll" data-text={children}>
+        <span>{children}</span>
+    </span>
+);
 
-const NavBar = () => {
+const NavBar = ({ ready }) => {
     const headerRef = useRef(null);
-    const [scrolled, setScrolled] = useState(false);
-    const [activeLink, setActiveLink] = useState("");
+    const menuRef = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
+    const time = useLocalTime();
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const isScrolled = window.scrollY > 10;
-            setScrolled(isScrolled);
+    // Hide while scrolling down, reveal on the way up.
+    useGSAP(() => {
+        if (!ready) return;
+        if (motionOK()) {
+            gsap.from(".nav-item", { yPercent: -120, opacity: 0, duration: 1.2, stagger: 0.06, delay: 0.5 });
         }
 
-        handleScroll();
-        window.addEventListener('scroll', handleScroll, {passive: true});
-
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [])
-
-    useEffect(() => {
-        const sections = ["#hero", ...navLinks.map(({link}) => link), "#contact"]
-            .map((selector) => document.querySelector(selector))
-            .filter(Boolean);
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) setActiveLink(`#${entry.target.id}`);
-            });
-        }, {rootMargin: "-45% 0px -50% 0px"});
-
-        sections.forEach((section) => observer.observe(section));
-
-        return () => observer.disconnect();
-    }, [])
+        ScrollTrigger.create({
+            start: 120,
+            end: "max",
+            onUpdate: (self) => {
+                headerRef.current.classList.toggle("nav-hidden", self.direction === 1 && !menuRef.current.classList.contains("open"));
+            },
+            onLeaveBack: () => headerRef.current.classList.remove("nav-hidden"),
+        });
+    }, { scope: headerRef, dependencies: [ready] });
 
     useEffect(() => {
+        const menu = menuRef.current;
         if (!menuOpen) return;
 
-        const close = () => setMenuOpen(false);
-        const handleKey = (event) => event.key === "Escape" && close();
-        const handlePointer = (event) => !headerRef.current?.contains(event.target) && close();
-        const desktop = window.matchMedia("(min-width: 1024px)");
+        if (motionOK()) {
+            gsap.fromTo(menu.querySelectorAll(".menu-link-inner"),
+                { yPercent: 110 },
+                { yPercent: 0, duration: 1, stagger: 0.07, delay: 0.25 });
+        }
 
+        const handleKey = (event) => event.key === "Escape" && setMenuOpen(false);
         document.addEventListener("keydown", handleKey);
-        document.addEventListener("pointerdown", handlePointer);
-        desktop.addEventListener("change", close);
-
-        return () => {
-            document.removeEventListener("keydown", handleKey);
-            document.removeEventListener("pointerdown", handlePointer);
-            desktop.removeEventListener("change", close);
-        };
-    }, [menuOpen])
-
-    useGSAP(() => {
-        gsap.fromTo(headerRef.current, {y: -40, opacity: 0, transition: "none"}, {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: "power3.out",
-            delay: 0.2,
-            clearProps: "transform,translate,opacity,transition",
-        });
-
-        gsap.fromTo(".nav-progress", {scaleX: 0}, {
-            scaleX: 1,
-            ease: "none",
-            scrollTrigger: {
-                start: 0,
-                end: "max",
-                scrub: 0.3,
-            },
-        });
-    }, {scope: headerRef});
+        return () => document.removeEventListener("keydown", handleKey);
+    }, [menuOpen]);
 
     const closeMenu = () => setMenuOpen(false);
 
     return (
-        <header ref={headerRef} className={`navbar ${scrolled || menuOpen ? 'scrolled' : 'not-scrolled'}`}>
-            <div className="inner">
-                <a className="logo group" href="#hero" onClick={closeMenu}>
-                    <span className="logo-mark">PK</span>
-                    <span className="flex flex-col leading-tight">
-                        <span className="text-white font-semibold">Patryk Konior</span>
-                        <span className="text-xs text-blue-50 font-normal">Full-stack Developer</span>
+        <header ref={headerRef} className="navbar">
+            <div className="nav-inner">
+                <a href="#top" className="nav-item nav-logo" onClick={closeMenu}>
+                    <span className="nav-logo-mark">PK</span>
+                    <span className="nav-logo-text">
+                        Patryk Konior<span className="text-muted"> — Full-stack Dev</span>
                     </span>
                 </a>
 
-                <nav className="desktop" aria-label="Main">
-                    <ul>
-                        {navLinks.map(({ link, name}) => (
-                            <li key={name}>
-                                <a href={link} className={activeLink === link ? "active" : ""}>
-                                    {name}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
+                <nav className="nav-links" aria-label="Main">
+                    {navLinks.map(({ name, link }, index) => (
+                        <a key={name} href={link} className="nav-item nav-link">
+                            <span className="mono text-muted">0{index + 1}</span>
+                            <RollText>{name}</RollText>
+                        </a>
+                    ))}
                 </nav>
 
-                <div className="flex items-center gap-3">
-                    <a href="#contact" className="contact-btn group">
-                        Let's talk
-                        <ArrowUpRightIcon className="size-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </a>
-
+                <div className="nav-actions">
+                    <span className="nav-item nav-time mono">
+                        <span className="pulse-dot" /> Chorzów {time}
+                    </span>
+                    <Magnetic className="nav-item">
+                        <a href="#contact" className="pill pill-accent nav-cta" onClick={closeMenu}>
+                            <RollText>Let's talk</RollText>
+                        </a>
+                    </Magnetic>
                     <button
                         type="button"
-                        className="menu-toggle"
+                        className={`nav-item menu-toggle ${menuOpen ? "open" : ""}`}
                         onClick={() => setMenuOpen((open) => !open)}
                         aria-label={menuOpen ? "Close menu" : "Open menu"}
                         aria-expanded={menuOpen}
                         aria-controls="mobile-menu"
                     >
-                        {menuOpen ? <CloseIcon /> : <MenuIcon />}
+                        <span />
+                        <span />
                     </button>
                 </div>
-
-                <div className="nav-progress" />
             </div>
 
-            <nav id="mobile-menu" className={`mobile-menu ${menuOpen ? "open" : ""}`} aria-label="Mobile">
+            <nav
+                id="mobile-menu"
+                ref={menuRef}
+                className={`mobile-menu ${menuOpen ? "open" : ""}`}
+                aria-label="Mobile"
+                aria-hidden={!menuOpen}
+            >
                 <ul>
-                    {navLinks.map(({link, name}) => (
-                        <li key={name}>
-                            <a
-                                href={link}
-                                onClick={closeMenu}
-                                tabIndex={menuOpen ? 0 : -1}
-                                className={activeLink === link ? "active" : ""}
-                            >
-                                {name}
+                    {[...navLinks, { name: "Contact", link: "#contact" }].map(({ name, link }, index) => (
+                        <li key={name} className="menu-link">
+                            <a href={link} onClick={closeMenu} tabIndex={menuOpen ? 0 : -1}>
+                                <span className="menu-link-inner">
+                                    <span className="mono text-muted">0{index + 1}</span>
+                                    {name}
+                                </span>
                             </a>
                         </li>
                     ))}
                 </ul>
-                <a href="#contact" onClick={closeMenu} tabIndex={menuOpen ? 0 : -1} className="mobile-cta">
-                    Let's talk
-                    <ArrowUpRightIcon className="size-4" />
-                </a>
+                <div className="mobile-menu-footer mono">
+                    <a href={`mailto:${contactInfo.email}`} tabIndex={menuOpen ? 0 : -1}>{contactInfo.email}</a>
+                    <span>Chorzów {time}</span>
+                </div>
             </nav>
         </header>
-    )
-}
-export default NavBar
+    );
+};
+
+export default NavBar;
