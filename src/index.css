@@ -403,24 +403,30 @@ section {
 .marquee-box {
     display: flex;
     align-items: center;
-    width: 200%;
+    width: max-content;
     height: 100%;
     position: absolute;
-    overflow: hidden;
-    animation: marquee 60s linear infinite;
+    animation: marquee 40s linear infinite;
+    will-change: transform;
 }
-.marquee-item {
-    float: left;
+.marquee:hover .marquee-box {
+    animation-play-state: paused;
 }
 @keyframes marquee {
-    0% {
-        left: 0;
+    from {
+        transform: translateX(0);
     }
-    100% {
-        left: -100%;
+    to {
+        transform: translateX(-50%);
     }
 }
 /* marquee end */
+
+@media (prefers-reduced-motion: reduce) {
+    .marquee-box {
+        animation: none;
+    }
+}
 
 .card {
     --start: 0;
