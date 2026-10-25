@@ -1,5 +1,12 @@
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
 import { contactInfo, navLinks } from "../constants";
 import { ArrowUpIcon, GitHubIcon, LinkedInIcon, MailIcon } from "../components/Icons";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const socials = [
   { name: "LinkedIn", url: contactInfo.linkedin, icon: <LinkedInIcon /> },
@@ -8,8 +15,24 @@ const socials = [
 ];
 
 const Footer = () => {
+  const footerRef = useRef(null);
+
+  useGSAP(() => {
+    const timeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: footerRef.current,
+        start: "top 95%",
+      },
+    });
+
+    timeline
+      .from(".footer-line", { scaleX: 0, duration: 1.2, ease: "power3.inOut" })
+      .from(".footer-main > *", { y: 30, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.12 }, "-=0.6")
+      .from(".footer-social", { scale: 0, duration: 0.4, ease: "back.out(2.5)", stagger: 0.08, clearProps: "transform" }, "-=0.4");
+  }, { scope: footerRef });
+
   return (
-    <footer className="footer">
+    <footer ref={footerRef} className="footer">
       <div className="footer-line" />
 
       <div className="footer-main">

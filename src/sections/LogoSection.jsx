@@ -1,5 +1,10 @@
-import React from 'react'
+import React, {useRef} from 'react'
+import gsap from "gsap";
+import {ScrollTrigger} from "gsap/ScrollTrigger";
+import {useGSAP} from "@gsap/react";
 import {logoIconsList} from "../constants/index.js";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const LogoIcon = ({icon}) => {
     return (
@@ -11,8 +16,23 @@ const LogoIcon = ({icon}) => {
 }
 
 const LogoSection = () => {
+    const sectionRef = useRef(null);
+
+    useGSAP(() => {
+        gsap.from(sectionRef.current, {
+            y: 60,
+            opacity: 0,
+            duration: 1,
+            ease: "power3.out",
+            scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "top 90%",
+            },
+        });
+    }, {scope: sectionRef});
+
     return (
-        <div className="md:my-20 my-10 relative">
+        <div ref={sectionRef} className="md:my-20 my-10 relative">
             <div className="gradient-edge"/>
             <div className="gradient-edge"/>
 

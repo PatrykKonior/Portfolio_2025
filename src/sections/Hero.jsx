@@ -19,6 +19,15 @@ const Hero = () => {
                 duration: 1,
                 ease: "power2.inOut",
             })
+
+        gsap.from('.hero-reveal', {
+            y: 30,
+            opacity: 0,
+            duration: 0.9,
+            ease: "power3.out",
+            stagger: 0.15,
+            delay: 0.7,
+        })
     });
 
     return (
@@ -53,12 +62,12 @@ const Hero = () => {
                             <h1>into Real Projects</h1>
                             <h1>that Deliver Results</h1>
                         </div>
-                        <p className="text-white-50 md:text-xl md:max-w-xl relative z-10 pointer-events-none">
+                        <p className="hero-reveal text-white-50 md:text-xl md:max-w-xl relative z-10 pointer-events-none">
                             Hi, I'm Patryk, a Full-stack Developer from Poland. I build web apps with React and Svelte, backed by Node.js and Elixir.
                         </p>
                         <Button
                             text="See My Work"
-                            className="md:w-80 md:h-16 w-60 h-12"
+                            className="hero-reveal md:w-80 md:h-16 w-60 h-12"
                             id="counter"
                         />
                     </div>
