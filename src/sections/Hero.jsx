@@ -1,88 +1,74 @@
-import { words } from "../constants/index.js";
-import Button from "../components/Button.jsx";
-import HeroExperience from "../components/HeroModels/HeroExperience.jsx";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import AnimatedCounter from "../components/AnimatedCounter.jsx";
+import { useRef } from "react";
+import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
+import { heroCopy } from "../constants/index.js";
+import Magnetic from "../components/Magnetic.jsx";
 
-const Hero = () => {
+const Hero = ({ ready }) => {
+    const ref = useRef(null);
+
     useGSAP(() => {
-        gsap.fromTo('.hero-text h1',
-            {
-                y: 50,
-                opacity: 0,
-            },
-            {
-                y: 0,
-                opacity: 1,
-                stagger: 0.2,
-                duration: 1,
-                ease: "power2.inOut",
-            })
+        if (!ready || !motionOK()) return;
 
-        gsap.from('.hero-reveal', {
-            y: 30,
-            opacity: 0,
-            duration: 0.9,
-            ease: "power3.out",
-            stagger: 0.15,
-            delay: 0.7,
-        })
-    });
+        SplitText.create(".hero-title", {
+            type: "lines,words",
+            mask: "lines",
+            autoSplit: true,
+            onSplit: (split) => gsap.from(split.words, {
+                yPercent: 115,
+                rotate: 4,
+                duration: 1.6,
+                stagger: 0.07,
+                delay: 0.15,
+            }),
+        });
+
+        gsap.from(".hero-reveal", { y: 40, opacity: 0, duration: 1.4, stagger: 0.1, delay: 0.7 });
+        gsap.from(".hero-line", { scaleX: 0, duration: 1.8, ease: "expo.inOut", delay: 0.3 });
+
+        // Parallax out as the next section arrives.
+        gsap.to(".hero-content", {
+            yPercent: -18,
+            opacity: 0.15,
+            ease: "none",
+            scrollTrigger: { trigger: ref.current, start: "top top", end: "bottom top", scrub: true },
+        });
+    }, { scope: ref, dependencies: [ready] });
 
     return (
-        <section id="hero" className="relative overflow-hidden">
-            <div className="absolute top-0 left-0 z-10">
-                <img src="/images/bg.png" alt="background" />
+        <section id="top" ref={ref} className="hero">
+            <div className="hero-content container-x">
+                <div className="hero-top hero-reveal">
+                    <span className="mono">{heroCopy.eyebrow}</span>
+                    <span className="mono text-muted">Based in Chorzów, Poland</span>
+                </div>
+
+                <h1 className="hero-title" dangerouslySetInnerHTML={{ __html: heroCopy.title }} />
+
+                <div className="hero-line" />
+
+                <div className="hero-bottom">
+                    <p className="hero-intro hero-reveal">{heroCopy.intro}</p>
+
+                    <div className="availability hero-reveal">
+                        <span className="pulse-dot" />
+                        {heroCopy.availability}
+                    </div>
+
+                    <Magnetic className="hero-reveal" strength={0.45}>
+                        <a href="#work" className="round-button" data-cursor="Explore">
+                            <span>See work</span>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
+                        </a>
+                    </Magnetic>
+                </div>
             </div>
 
-            <div className="hero-layout">
-                {/*  LEFT SIDE OF HERO CONTENT */}
-                <header className="flex flex-col justify-center md:w-full w-screen md:px-20 px-5 ">
-                    <div className="flex flex-col gap-7">
-                        <div className="hero-text">
-                            <h1>
-                                Shaping
-                                <span className="slide">
-                                    <span className="wrapper">
-                                        {words.map((word, index) => (
-                                            <span key={index} className="flex items-center md:gap-3 gap-1 pb-2">
-                                                <img
-                                                    src={word.imgPath}
-                                                    alt={word.text}
-                                                    className="xl:size-12 md:size-10 size-7 md:p-2 p-1 rounded-full bg-white-50" />
-
-                                                <span>{word.text}</span>
-
-                                            </span>
-                                            ))}
-                                    </span>
-                                </span>
-                            </h1>
-                            <h1>into Real Projects</h1>
-                            <h1>that Deliver Results</h1>
-                        </div>
-                        <p className="hero-reveal text-white-50 md:text-xl md:max-w-xl relative z-10 pointer-events-none">
-                            Hi, I'm Patryk, a Full-stack Developer from Poland. I build web apps with React and Svelte, backed by Node.js and Elixir.
-                        </p>
-                        <Button
-                            text="See My Work"
-                            className="hero-reveal md:w-80 md:h-16 w-60 h-12"
-                            id="counter"
-                        />
-                    </div>
-                </header>
-
-
-                {/*  RIGHT SIDE - 3D */}
-                <figure>
-                    <div className="hero-3d-layout">
-                        <HeroExperience />
-                    </div>
-                </figure>
+            <div className="scroll-hint mono" aria-hidden="true">
+                <span>Scroll</span>
+                <span className="scroll-hint-track"><span /></span>
             </div>
-            <AnimatedCounter />
         </section>
-    )
-}
-export default Hero
+    );
+};
+
+export default Hero;

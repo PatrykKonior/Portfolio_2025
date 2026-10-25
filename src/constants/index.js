@@ -22,16 +22,15 @@ const contactInfo = {
   languages: "English B2/C1 · German A2",
 };
 
-const words = [
-  { text: "Ideas", imgPath: "/images/ideas.svg" },
-  { text: "Concepts", imgPath: "/images/concepts.svg" },
-  { text: "Designs", imgPath: "/images/designs.svg" },
-  { text: "Code", imgPath: "/images/code.svg" },
-  { text: "Ideas", imgPath: "/images/ideas.svg" },
-  { text: "Concepts", imgPath: "/images/concepts.svg" },
-  { text: "Designs", imgPath: "/images/designs.svg" },
-  { text: "Code", imgPath: "/images/code.svg" },
-];
+const heroCopy = {
+  eyebrow: "Full-stack Developer — Portfolio ©2026",
+  title: "Building <em>web apps</em> from database to&nbsp;pixel.",
+  intro: "Hi, I'm Patryk. I design and ship production software with React, Svelte, Elixir, Node.js and .NET, and I talk directly with the people who use it.",
+  availability: "Available for new projects",
+};
+
+const aboutText =
+  "I take features all the way from database schema and real-time APIs to a polished interface, then ship them with Docker and CI/CD. Three years of commercial work across Elixir, Node.js and .NET taught me that great software is equal parts clean code and clear conversations with clients.";
 
 const counterItems = [
   { value: 3, suffix: "+", label: "Years of Commercial Experience" },
@@ -76,6 +75,7 @@ const abilities = [
 const projects = [
   {
     title: "Design Office Management Suite",
+    year: "Desktop · Web · Mobile",
     desc: "A system for running a design office: clients, projects, invoices, payments, tasks and time tracking. One .NET Core REST API serves three apps: a web app and a mobile app built from a single React Native (Expo) codebase, and a WPF desktop app built with MVVM.",
     tags: ["C#", ".NET Core", "Entity Framework", "WPF / MVVM", "React Native", "Expo", "TypeScript", "SQL Server"],
     architecture: {
@@ -95,6 +95,7 @@ const projects = [
   },
   {
     title: "Pizza Restaurant Admin Dashboard",
+    year: "Web dashboard",
     desc: "A React dashboard for managing the menu, orders, inventory, staff schedules and documents, backed by a .NET REST API.",
     tags: ["React", "React Router", "Bootstrap", "C#", ".NET Core", "SQL Server"],
     architecture: {
@@ -109,6 +110,7 @@ const projects = [
   },
   {
     title: "Pento: Phoenix LiveView Store",
+    year: "Real-time store",
     desc: "An online store built with Phoenix LiveView. Users sign up, browse and search products by SKU, rate them and fill in a demographic survey. The admin dashboard turns ratings into interactive charts filtered by age group and gender, all without page reloads.",
     tags: ["Elixir", "Phoenix", "LiveView", "Ecto", "PostgreSQL"],
     architecture: {
@@ -123,21 +125,25 @@ const projects = [
 const services = [
   {
     title: "Web Applications",
+    points: ["Figma to production", "CRMs & internal tools", "Responsive, accessible UI"],
     desc: "Custom web apps, CRMs and internal tools built with React, Svelte or Phoenix LiveView, from the first Figma sketch to production.",
     icons: ["/images/tech/react.svg", "/images/tech/svelte.svg", "/images/tech/phoenix.svg"],
   },
   {
     title: "Backend & Real-time APIs",
+    points: ["REST & WebSockets", "Auth with JWT / OAuth", "SQL & NoSQL data models"],
     desc: "REST APIs and live features over WebSockets, built with Elixir, Node.js or .NET on top of PostgreSQL, SQL Server or MongoDB.",
     icons: ["/images/tech/elixir.svg", "/images/tech/nodejs.svg", "/images/tech/dotnet.svg"],
   },
   {
     title: "Deployment & DevOps",
+    points: ["Docker & Nginx", "CI/CD pipelines", "Linux servers & S3"],
     desc: "Dockerized apps served by Nginx on Linux servers, automated CI/CD pipelines and file storage on Amazon S3.",
     icons: ["/images/tech/docker.svg", "/images/tech/linux.svg", "/images/tech/git.svg"],
   },
   {
     title: "Performance & SEO",
+    points: ["Core Web Vitals", "Semantic structure", "Accessibility audits"],
     desc: "Faster pages, better accessibility and a clean structure that search engines understand.",
     icons: ["/images/tech/html5.svg", "/images/tech/tailwindcss.svg", "/images/tech/typescript.svg"],
   },
@@ -149,6 +155,7 @@ const expCards = [
     logoText: "LTR",
     summary: "Developing and maintaining three products in parallel: an EdTech learning platform, a CRM system and an internal company tool.",
     title: "Full-stack Developer",
+    period: "2026 — Now",
     date: "January 2026 – Present · Remote",
     responsibilities: [
       "Building web interfaces in TypeScript, JavaScript and Svelte with Tailwind CSS, on an Elixir / Phoenix LiveView backend.",
@@ -164,6 +171,7 @@ const expCards = [
     logoText: "M",
     summary: "Promoted after a year on the frontend to take ownership of features across the whole stack.",
     title: "Junior Fullstack Developer",
+    period: "2025",
     date: "March 2025 – December 2025 · Hybrid",
     responsibilities: [
       "Building REST APIs secured with JWT and OAuth, backed by Microsoft SQL Server and MongoDB.",
@@ -177,6 +185,7 @@ const expCards = [
     logoText: "M",
     summary: "Started my commercial career building web applications for clients in React.",
     title: "Junior Frontend Developer",
+    period: "2024 — 2025",
     date: "March 2024 – March 2025 · On-site",
     responsibilities: [
       "Building and maintaining web applications in React with JavaScript and TypeScript.",
@@ -187,41 +196,9 @@ const expCards = [
   },
 ];
 
-const techStackIcons = [
-  {
-    name: "React Developer",
-    modelPath: "/models/react_logo-transformed.glb",
-    scale: 1,
-    rotation: [0, 0, 0],
-  },
-  {
-    name: "Python Developer",
-    modelPath: "/models/python-transformed.glb",
-    scale: 0.8,
-    rotation: [0, 0, 0],
-  },
-  {
-    name: "Backend Developer",
-    modelPath: "/models/node-transformed.glb",
-    scale: 5,
-    rotation: [0, -Math.PI / 2, 0],
-  },
-  {
-    name: "Interactive Developer",
-    modelPath: "/models/three.js-transformed.glb",
-    scale: 0.05,
-    rotation: [0, 0, 0],
-  },
-  {
-    name: "Project Manager",
-    modelPath: "/models/git-svg-transformed.glb",
-    scale: 0.05,
-    rotation: [0, -Math.PI / 4, 0],
-  },
-];
-
 export {
-  words,
+  heroCopy,
+  aboutText,
   abilities,
   logoIconsList,
   counterItems,
@@ -229,6 +206,5 @@ export {
   projects,
   services,
   contactInfo,
-  techStackIcons,
   navLinks,
 };

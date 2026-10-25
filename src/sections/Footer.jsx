@@ -1,77 +1,72 @@
 import { useRef } from "react";
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
+import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { contactInfo, navLinks } from "../constants";
-import { ArrowUpIcon, GitHubIcon, LinkedInIcon, MailIcon } from "../components/Icons";
-
-gsap.registerPlugin(ScrollTrigger);
+import useLocalTime from "../hooks/useLocalTime.js";
 
 const socials = [
-  { name: "LinkedIn", url: contactInfo.linkedin, icon: <LinkedInIcon /> },
-  { name: "GitHub", url: contactInfo.github, icon: <GitHubIcon /> },
-  { name: "Email", url: `mailto:${contactInfo.email}`, icon: <MailIcon /> },
+  { name: "LinkedIn", url: contactInfo.linkedin },
+  { name: "GitHub", url: contactInfo.github },
+  { name: "Email", url: `mailto:${contactInfo.email}` },
 ];
 
 const Footer = () => {
   const footerRef = useRef(null);
+  const time = useLocalTime();
 
   useGSAP(() => {
-    const timeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: footerRef.current,
-        start: "top 95%",
-      },
+    if (!motionOK()) return;
+    gsap.from(".footer-giant span", {
+      yPercent: 100,
+      duration: 1.4,
+      stagger: 0.04,
+      scrollTrigger: { trigger: ".footer-giant", start: "top 95%" },
     });
-
-    timeline
-      .from(".footer-line", { scaleX: 0, duration: 1.2, ease: "power3.inOut" })
-      .from(".footer-main > *", { y: 30, opacity: 0, duration: 0.7, ease: "power3.out", stagger: 0.12 }, "-=0.6")
-      .from(".footer-social", { scale: 0, duration: 0.4, ease: "back.out(2.5)", stagger: 0.08, clearProps: "transform" }, "-=0.4");
   }, { scope: footerRef });
 
   return (
-    <footer ref={footerRef} className="footer">
-      <div className="footer-line" />
-
-      <div className="footer-main">
-        <div className="flex flex-col gap-1 md:items-start items-center">
-          <a href="#hero" className="text-xl font-semibold">Patryk Konior</a>
-          <p className="text-white-50 text-sm">Full-stack Developer · {contactInfo.location}</p>
-        </div>
-
-        <nav aria-label="Footer">
-          <ul className="flex flex-wrap justify-center gap-x-8 gap-y-2">
+    <footer ref={footerRef} className="footer container-x">
+      <div className="footer-grid">
+        <div>
+          <p className="mono text-muted">Navigation</p>
+          <ul>
             {[...navLinks, { name: "Contact", link: "#contact" }].map(({ name, link }) => (
-              <li key={name}>
-                <a href={link} className="footer-nav-link">{name}</a>
+              <li key={name}><a href={link} className="footer-link">{name}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <p className="mono text-muted">Socials</p>
+          <ul>
+            {socials.map((social) => (
+              <li key={social.name}>
+                <a
+                  href={social.url}
+                  target={social.url.startsWith("http") ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  className="footer-link"
+                >
+                  {social.name} ↗
+                </a>
               </li>
             ))}
           </ul>
-        </nav>
-
-        <div className="flex gap-3 md:justify-end justify-center">
-          {socials.map((social) => (
-            <a
-              key={social.name}
-              href={social.url}
-              target={social.url.startsWith("http") ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              aria-label={social.name}
-              className="footer-social"
-            >
-              {social.icon}
-            </a>
-          ))}
+        </div>
+        <div>
+          <p className="mono text-muted">Local time</p>
+          <p className="footer-time">{time} <span className="text-muted">CET</span></p>
+        </div>
+        <div className="md:text-right">
+          <a href="#top" className="pill">Back to top ↑</a>
         </div>
       </div>
 
-      <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} Patryk Konior. All rights reserved.</p>
-        <a href="#hero" className="flex items-center gap-2 hover:text-white transition-colors">
-          Back to top <ArrowUpIcon className="size-4" />
-        </a>
+      <div className="footer-giant" aria-hidden="true">
+        {"KONIOR".split("").map((char, index) => <span key={index}>{char}</span>)}
+      </div>
+
+      <div className="footer-bottom mono text-muted">
+        <span>© {new Date().getFullYear()} Patryk Konior</span>
+        <span>Built with React, Three.js & GSAP</span>
       </div>
     </footer>
   );
