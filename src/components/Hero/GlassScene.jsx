@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Environment, Float, Lightformer, MeshTransmissionMaterial, Text } from "@react-three/drei";
+import { Environment, Float, Lightformer, MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
-import fontUrl from "@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-800-normal.woff?url";
 
 import { scrollState } from "../../lib/smoothScroll.js";
 import { heroState } from "./heroState.js";
@@ -10,6 +9,7 @@ import { heroState } from "./heroState.js";
 const { damp } = THREE.MathUtils;
 const BACKGROUND = "#eeece7";
 const INK = "#111111";
+const FONT = '"Bricolage Grotesque Variable", sans-serif';
 
 const glassProps = (quality) => ({
     backside: true,
@@ -105,10 +105,55 @@ const Shard = ({ shard, quality, index }) => {
     );
 };
 
+// Draws the name onto a canvas texture once the page font is ready. (drei's <Text> blanks the
+// whole canvas under React StrictMode, and this keeps the hero on the same font as the page.)
+const useNameTexture = (width, height, fontSize) => {
+    const [texture, setTexture] = useState(null);
+
+    useEffect(() => {
+        let cancelled = false;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        document.fonts.load(`800 ${Math.round(fontSize)}px ${FONT}`).then(() => {
+            if (cancelled) return;
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
+            const context = canvas.getContext("2d");
+            context.scale(dpr, dpr);
+            context.fillStyle = INK;
+            context.textAlign = "center";
+            context.textBaseline = "middle";
+            context.font = `800 ${fontSize}px ${FONT}`;
+            context.letterSpacing = `${-0.06 * fontSize}px`;
+            // Negative tracking leaves a trailing gap that pushes centred text right; pull it back.
+            const x = width / 2 - context.measureText("M").width * 0.04;
+            context.fillText("PATRYK", x, height / 2 - fontSize * 0.42);
+            context.fillText("KONIOR", x, height / 2 + fontSize * 0.42);
+
+            const next = new THREE.CanvasTexture(canvas);
+            next.colorSpace = THREE.SRGBColorSpace;
+            next.anisotropy = 4;
+            setTexture(next);
+        });
+
+        return () => {
+            cancelled = true;
+        };
+    }, [width, height, fontSize]);
+
+    useEffect(() => () => texture?.dispose(), [texture]);
+
+    return texture;
+};
+
 const Name = () => {
     const group = useRef(null);
     const viewport = useThree((state) => state.viewport);
+    const size = useThree((state) => state.size);
     const fontSize = Math.min(viewport.width / 4.6, viewport.height / 3.3);
+    const pixelsPerUnit = size.width / viewport.width;
+    const texture = useNameTexture(size.width, size.height, fontSize * pixelsPerUnit);
 
     useFrame((_, rawDelta) => {
         const delta = Math.min(rawDelta, 0.05);
@@ -120,12 +165,12 @@ const Name = () => {
 
     return (
         <group ref={group}>
-            <Text font={fontUrl} fontSize={fontSize} letterSpacing={-0.06} lineHeight={0.82} anchorX="center" anchorY="middle" color={INK} position={[0, fontSize * 0.42, 0]}>
-                PATRYK
-            </Text>
-            <Text font={fontUrl} fontSize={fontSize} letterSpacing={-0.06} lineHeight={0.82} anchorX="center" anchorY="middle" color={INK} position={[0, -fontSize * 0.42, 0]}>
-                KONIOR
-            </Text>
+            {texture && (
+                <mesh>
+                    <planeGeometry args={[viewport.width, viewport.height]} />
+                    <meshBasicMaterial map={texture} transparent toneMapped={false} />
+                </mesh>
+            )}
         </group>
     );
 };
