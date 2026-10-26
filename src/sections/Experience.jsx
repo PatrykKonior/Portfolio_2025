@@ -1,87 +1,96 @@
-import { useRef, useState } from "react";
-import { gsap, useGSAP, motionOK } from "../lib/motion.js";
+import { useRef } from "react";
+import { gsap, ScrollTrigger, useGSAP, motionOK } from "../lib/motion.js";
 import { expCards } from "../constants/index.js";
-import SectionHeading from "../components/SectionHeading.jsx";
 
-const ExperienceRow = ({ job, open, onToggle, id }) => {
-    const panelRef = useRef(null);
+const DIGITS = "0123456789".split("");
 
-    useGSAP(() => {
-        const panel = panelRef.current;
-        if (!motionOK()) {
-            gsap.set(panel, { height: open ? "auto" : 0 });
-            return;
-        }
-        gsap.to(panel, { height: open ? "auto" : 0, duration: 0.9, ease: "expo.inOut" });
-        if (open) {
-            gsap.fromTo(panel.querySelectorAll("li"), { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.025, delay: 0.25 });
-        }
-    }, { dependencies: [open] });
-
-    return (
-        <li className={`exp-row ${open ? "open" : ""}`}>
-            <button
-                type="button"
-                className="exp-row-head"
-                onClick={onToggle}
-                aria-expanded={open}
-                aria-controls={id}
-            >
-                <span className="exp-fill" aria-hidden="true" />
-                <span className="mono exp-date">{job.period}</span>
-                <span className="exp-role">{job.title}</span>
-                <span className="exp-company">{job.company}</span>
-                <span className="exp-toggle" aria-hidden="true" />
-            </button>
-
-            <div id={id} ref={panelRef} className="exp-panel" style={{ height: 0 }}>
-                <div className="exp-panel-inner">
-                    <div>
-                        <p className="exp-summary">{job.summary}</p>
-                        <p className="mono text-muted mt-6">{job.date}</p>
-                    </div>
-                    <ul className="exp-list">
-                        {job.responsibilities.map((item) => <li key={item}>{item}</li>)}
-                    </ul>
-                    <ul className="chips exp-stack">
-                        {job.stack.map((tech) => <li key={tech} className="chip">{tech}</li>)}
-                    </ul>
-                </div>
-            </div>
-        </li>
-    );
-};
+// Four odometer columns; each one rolls to its digit.
+const RollingYear = ({ year }) => (
+    <div className="year" aria-hidden="true">
+        {year.split("").map((digit, column) => (
+            <span key={column} className="year-col">
+                <span className="year-strip" data-column={column} data-digit={digit}>
+                    {DIGITS.map((d) => <span key={d}>{d}</span>)}
+                </span>
+            </span>
+        ))}
+    </div>
+);
 
 const Experience = () => {
     const ref = useRef(null);
-    const [openIndex, setOpenIndex] = useState(0);
+    const startYear = expCards[0].period.slice(0, 4);
 
     useGSAP(() => {
-        if (!motionOK()) return;
-        gsap.from(".exp-row", {
-            y: 50,
-            opacity: 0,
-            duration: 1.2,
-            stagger: 0.12,
-            scrollTrigger: { trigger: ".exp-list-wrap", start: "top 80%" },
+        const setYear = (year, company) => {
+            year.split("").forEach((digit, column) => {
+                gsap.to(`.year-strip[data-column="${column}"]`, {
+                    yPercent: -Number(digit) * 10,
+                    duration: motionOK() ? 1 : 0,
+                    ease: "expo.inOut",
+                    delay: column * 0.05,
+                    overwrite: true,
+                });
+            });
+            ref.current.querySelector(".year-company").textContent = company;
+        };
+        gsap.set(".year-strip", { yPercent: (i, el) => -Number(el.dataset.digit) * 10 });
+
+        gsap.utils.toArray(".job").forEach((job, index) => {
+            const { period, company } = expCards[index];
+            ScrollTrigger.create({
+                trigger: job,
+                start: "top 55%",
+                end: "bottom 55%",
+                onToggle: (self) => self.isActive && setYear(period.slice(0, 4), company),
+            });
+            if (motionOK()) {
+                gsap.from(job, { y: 80, opacity: 0, duration: 1.2, ease: "expo.out", scrollTrigger: { trigger: job, start: "top 85%" } });
+            }
         });
+
+        if (motionOK()) {
+            gsap.fromTo(".journey-progress span", { scaleY: 0 }, {
+                scaleY: 1,
+                ease: "none",
+                scrollTrigger: { trigger: ".jobs", start: "top 55%", end: "bottom 55%", scrub: true },
+            });
+        }
     }, { scope: ref });
 
     return (
-        <section id="experience" ref={ref} className="experience container-x section-space">
-            <SectionHeading index="04" label="Experience" title="Where I've <em>worked</em>" aside="2024 — Now" />
+        <section id="experience" ref={ref} className="journey container">
+            <div className="section-head">
+                <p className="eyebrow mono"><span className="eyebrow-index">04</span> Journey</p>
+                <h2 className="section-title">Where I've <em>worked</em></h2>
+            </div>
 
-            <ul className="exp-list-wrap">
-                {expCards.map((job, index) => (
-                    <ExperienceRow
-                        key={job.title}
-                        id={`exp-panel-${index}`}
-                        job={job}
-                        open={openIndex === index}
-                        onToggle={() => setOpenIndex(openIndex === index ? -1 : index)}
-                    />
-                ))}
-            </ul>
+            <div className="journey-grid">
+                <div className="journey-sticky">
+                    <RollingYear year={startYear} />
+                    <p className="year-company mono">{expCards[0].company}</p>
+                    <div className="journey-progress" aria-hidden="true"><span /></div>
+                </div>
+
+                <ol className="jobs">
+                    {expCards.map((job) => (
+                        <li key={job.title} className="job glass">
+                            <div className="job-head">
+                                <span className="mono text-muted">{job.date}</span>
+                                <span className="job-company">{job.company}</span>
+                            </div>
+                            <h3 className="job-title">{job.title}</h3>
+                            <p className="job-summary">{job.summary}</p>
+                            <ul className="job-list">
+                                {job.responsibilities.map((item) => <li key={item}>{item}</li>)}
+                            </ul>
+                            <ul className="chips">
+                                {job.stack.map((tech) => <li key={tech} className="chip">{tech}</li>)}
+                            </ul>
+                        </li>
+                    ))}
+                </ol>
+            </div>
         </section>
     );
 };

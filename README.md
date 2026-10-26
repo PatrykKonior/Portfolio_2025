@@ -4,11 +4,13 @@ Personal portfolio and client site. React 19 + Vite, with a WebGL scene in React
 
 ## Highlights
 
-- One fixed WebGL scene: a custom-shader iridescent blob and a dust field that move, morph and recolour per section (`src/components/Scene`).
-- Lenis smooth scrolling synced with GSAP ScrollTrigger (`src/lib/smoothScroll.js`).
-- Preloader, SplitText headline reveals, scroll-lit About copy, a pinned horizontal Work gallery, stacking Services cards, an Experience accordion and a velocity-reactive tech marquee.
-- Custom cursor, magnetic buttons, film grain; everything falls back gracefully with `prefers-reduced-motion`.
-- Three.js loads in its own chunk so the page paints first.
+- Liquid-glass hero: the name is rendered in WebGL and refracted by glass shapes (drei `MeshTransmissionMaterial` with chromatic aberration); the main lens follows the pointer (`src/components/Hero`).
+- Floating glass dock navigation with a sliding indicator.
+- Typographic project index with a pointer-following preview and a case-study drawer.
+- Bento grid with tilt, spotlight, a live clock and an orbiting toolbox.
+- Sticky odometer year for the experience timeline, proximity-reactive variable type in Contact.
+- Lenis smooth scrolling synced with GSAP ScrollTrigger; everything falls back gracefully with `prefers-reduced-motion`.
+- Three.js loads in its own chunk and stops rendering once the hero is off screen.
 
 ## Scripts
 
