@@ -12,6 +12,7 @@ const Hero = ({ ready }) => {
         SplitText.create(".hero-title", {
             type: "lines,words",
             mask: "lines",
+            linesClass: "sline",
             autoSplit: true,
             onSplit: (split) => gsap.from(split.words, {
                 yPercent: 115,

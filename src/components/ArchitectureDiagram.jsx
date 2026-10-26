@@ -18,7 +18,7 @@ const ArchitectureDiagram = ({ architecture }) => {
         <div className="arch-panel">
             {/* The server node stretches to the clients row so every client link lands on it. */}
             <div className="flex flex-col items-center">
-                <div className="flex justify-center gap-3">
+                <div className="arch-clients">
                     {clients.map((client) => (
                         <div key={client.name} className="flex flex-col items-center">
                             <ArchNode node={client} tier="Client" />

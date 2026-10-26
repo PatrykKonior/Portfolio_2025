@@ -56,7 +56,10 @@ const About = () => {
                             <span className="stat-value" data-value={item.value}>{item.value}</span>
                             <span className="text-accent">{item.suffix}</span>
                         </div>
-                        <p className="text-muted">{item.label}</p>
+                        <div>
+                            <p className="stat-label">{item.label}</p>
+                            <p className="stat-detail mono">{item.detail}</p>
+                        </div>
                     </div>
                 ))}
             </div>

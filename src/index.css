@@ -5,7 +5,7 @@
     --font-sans: "Inter Tight", system-ui, sans-serif;
     --font-serif: "Instrument Serif", Georgia, serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
-    --color-accent: #d4ff3a;
+    --color-accent: #4d7cff;
     --color-muted: #8b8a85;
 }
 
@@ -15,7 +15,8 @@
     --fg: #ecebe6;
     --muted: #8b8a85;
     --line: rgba(236, 235, 230, 0.12);
-    --accent: #d4ff3a;
+    --accent: #4d7cff;
+    --on-accent: #ffffff;
     --gutter: clamp(1rem, 3.5vw, 3.5rem);
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     color-scheme: dark;
@@ -36,7 +37,7 @@ body {
 
 ::selection {
     background: var(--accent);
-    color: #0a0a0b;
+    color: var(--on-accent);
 }
 
 em {
@@ -133,7 +134,7 @@ img {
 
 .pill-accent {
     background: var(--accent);
-    color: #0a0a0b;
+    color: var(--on-accent);
     border-color: var(--accent);
     font-weight: 500;
 }
@@ -141,6 +142,7 @@ img {
 .pill-accent:hover {
     background: var(--fg);
     border-color: var(--fg);
+    color: var(--bg);
 }
 
 .magnetic {
@@ -233,13 +235,19 @@ a:hover .roll::after {
 
 .round-button-accent {
     background: var(--accent);
-    color: #0a0a0b;
+    color: var(--on-accent);
     border-color: var(--accent);
     font-weight: 500;
 }
 
 .round-button-accent:disabled {
     opacity: 0.6;
+}
+
+/* SplitText line masks clip overflow; extend the clip box so descenders aren't cut. */
+.sline-mask {
+    padding-bottom: 0.14em;
+    margin-bottom: -0.14em;
 }
 
 /* ---------- Global layers ---------- */
@@ -311,7 +319,7 @@ a:hover .roll::after {
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #0a0a0b;
+    color: var(--on-accent);
     opacity: 0;
     transition: opacity 0.3s;
 }
@@ -751,9 +759,14 @@ a:hover .roll::after {
     letter-spacing: -0.05em;
 }
 
-.stat p {
-    font-size: 0.95rem;
-    max-width: 18rem;
+.stat-label {
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+.stat-detail {
+    margin-top: 0.4rem;
+    color: var(--muted);
 }
 
 .principles {
@@ -843,7 +856,7 @@ a:hover .roll::after {
     padding: clamp(2rem, 4vw, 3rem) 1rem;
     overflow: hidden;
     background:
-        radial-gradient(circle at 70% 20%, rgba(212, 255, 58, 0.09), transparent 55%),
+        radial-gradient(circle at 70% 20%, rgba(77, 124, 255, 0.12), transparent 55%),
         rgba(14, 14, 16, 0.9);
 }
 
@@ -880,7 +893,7 @@ a:hover .roll::after {
 
 .work-more:hover {
     background: var(--accent);
-    color: #0a0a0b;
+    color: var(--on-accent);
 }
 
 .work-more:hover .text-muted {
@@ -959,17 +972,28 @@ a:hover .roll::after {
     border-radius: 0.9rem;
     background: rgba(24, 24, 27, 0.85);
     font-size: 0.85rem;
-    transition: border-color 0.4s var(--ease-out), transform 0.4s var(--ease-out);
+    transition: border-color 0.4s var(--ease-out), box-shadow 0.4s var(--ease-out);
 }
 
 .arch-node:hover {
     border-color: var(--accent);
-    transform: translateY(-2px);
+    box-shadow: 0 0 0 4px rgba(77, 124, 255, 0.15);
 }
 
 .arch-tier {
     font-size: 0.6rem;
     color: var(--accent);
+}
+
+.arch-clients {
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    gap: 0.75rem;
+}
+
+.arch-clients .arch-node {
+    width: 100%;
 }
 
 .arch-link {
@@ -1028,7 +1052,7 @@ a:hover .roll::after {
 }
 
 .tone-0 { background: #151517; color: var(--fg); border: 1px solid var(--line); }
-.tone-1 { background: var(--accent); color: #0a0a0b; }
+.tone-1 { background: var(--accent); color: var(--on-accent); }
 .tone-2 { background: var(--fg); color: #0a0a0b; }
 .tone-3 { background: #1b1730; color: var(--fg); border: 1px solid rgba(160, 140, 255, 0.2); }
 
@@ -1126,7 +1150,7 @@ a:hover .roll::after {
     padding: clamp(1.5rem, 3vw, 2.5rem) 0;
     text-align: left;
     isolation: isolate;
-    transition: color 0.5s var(--ease-out), padding 0.6s var(--ease-out);
+    transition: color 0.5s var(--ease-out);
 }
 
 .exp-fill {
@@ -1140,7 +1164,7 @@ a:hover .roll::after {
 }
 
 .exp-row-head:hover {
-    color: #0a0a0b;
+    color: var(--on-accent);
 }
 
 .exp-row-head:hover .exp-fill {
@@ -1210,6 +1234,7 @@ a:hover .roll::after {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
+    padding-top: 1.75rem;
     padding-bottom: clamp(2rem, 4vw, 3rem);
 }
 
@@ -1246,8 +1271,21 @@ a:hover .roll::after {
         grid-template-areas: "date role company toggle";
     }
 
-    .exp-row-head:hover {
-        padding-inline: 1.5rem;
+    .exp-role {
+        white-space: nowrap;
+    }
+
+    /* Nudge the content instead of padding the row, so the grid columns keep their width. */
+    .exp-row-head > span:not(.exp-fill) {
+        transition: transform 0.6s var(--ease-out);
+    }
+
+    .exp-row-head:hover > span:not(.exp-fill, .exp-toggle) {
+        transform: translateX(1.5rem);
+    }
+
+    .exp-row-head:hover > .exp-toggle {
+        transform: translateX(-1.5rem);
     }
 
     .exp-panel-inner {
@@ -1530,7 +1568,7 @@ a:hover .roll::after {
     justify-content: space-between;
     margin-top: clamp(3rem, 7vw, 6rem);
     overflow: hidden;
-    font-size: 25.5vw;
+    font-size: 24vw;
     font-weight: 600;
     line-height: 0.78;
     letter-spacing: -0.06em;
@@ -1539,6 +1577,11 @@ a:hover .roll::after {
 
 .footer-giant span {
     display: inline-block;
+}
+
+/* Negative tracking shrinks the last glyph's box; give it back so the R isn't clipped. */
+.footer-giant span:last-child {
+    padding-right: 0.06em;
 }
 
 .footer-bottom {

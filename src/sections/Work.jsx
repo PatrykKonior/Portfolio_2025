@@ -64,16 +64,19 @@ const Work = () => {
                 scrollTrigger: { trigger: ".work-pin", start: "top top", end: () => `+=${distance()}`, scrub: true },
             });
 
+            // fromTo with explicit end values: the nodes' CSS hover transition would otherwise
+            // make GSAP read a mid-transition transform as the end state.
+            gsap.fromTo(".arch-node", { y: 30, scale: 0.85, opacity: 0 }, {
+                y: 0,
+                scale: 1,
+                opacity: 1,
+                duration: 0.9,
+                stagger: 0.05,
+                ease: "back.out(1.8)",
+                scrollTrigger: { trigger: ".work-track", start: "top 75%" },
+            });
+
             gsap.utils.toArray(".work-card").forEach((card) => {
-                gsap.from(card.querySelectorAll(".arch-node"), {
-                    y: 30,
-                    scale: 0.85,
-                    opacity: 0,
-                    duration: 0.9,
-                    stagger: 0.08,
-                    ease: "back.out(1.8)",
-                    scrollTrigger: { trigger: card, containerAnimation: slide, start: "left 75%" },
-                });
                 gsap.fromTo(card.querySelector(".work-card-index"), { xPercent: 40 }, {
                     xPercent: -40,
                     ease: "none",
