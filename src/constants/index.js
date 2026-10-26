@@ -75,6 +75,7 @@ const abilities = [
 const projects = [
   {
     title: "Design Office Management Suite",
+    tint: "linear-gradient(135deg, #c9d6ff 0%, #f6d4ff 100%)",
     year: "Desktop · Web · Mobile",
     desc: "A system for running a design office: clients, projects, invoices, payments, tasks and time tracking. One .NET Core REST API serves three apps: a web app and a mobile app built from a single React Native (Expo) codebase, and a WPF desktop app built with MVVM.",
     tags: ["C#", ".NET Core", "Entity Framework", "WPF / MVVM", "React Native", "Expo", "TypeScript", "SQL Server"],
@@ -95,6 +96,7 @@ const projects = [
   },
   {
     title: "Pizza Restaurant Admin Dashboard",
+    tint: "linear-gradient(135deg, #ffe0c2 0%, #ffd1dc 100%)",
     year: "Web dashboard",
     desc: "A React dashboard for managing the menu, orders, inventory, staff schedules and documents, backed by a .NET REST API.",
     tags: ["React", "React Router", "Bootstrap", "C#", ".NET Core", "SQL Server"],
@@ -110,6 +112,7 @@ const projects = [
   },
   {
     title: "Pento: Phoenix LiveView Store",
+    tint: "linear-gradient(135deg, #d5f5e3 0%, #c8e1ff 100%)",
     year: "Real-time store",
     desc: "An online store built with Phoenix LiveView. Users sign up, browse and search products by SKU, rate them and fill in a demographic survey. The admin dashboard turns ratings into interactive charts filtered by age group and gender, all without page reloads.",
     tags: ["Elixir", "Phoenix", "LiveView", "Ecto", "PostgreSQL"],

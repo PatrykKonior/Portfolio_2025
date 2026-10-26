@@ -1,20 +1,16 @@
-import { lazy, Suspense, useState } from "react";
+import { useState } from "react";
 
-import Preloader from "./components/Preloader.jsx";
+import Intro from "./components/Intro.jsx";
 import Cursor from "./components/Cursor.jsx";
-import NavBar from "./components/NavBar.jsx";
+import Dock from "./components/Dock.jsx";
 import Hero from "./sections/Hero.jsx";
-import About from "./sections/About.jsx";
+import Statement from "./sections/Statement.jsx";
 import Work from "./sections/Work.jsx";
-import Services from "./sections/Services.jsx";
+import Bento from "./sections/Bento.jsx";
 import Experience from "./sections/Experience.jsx";
-import Stack from "./sections/Stack.jsx";
 import Contact from "./sections/Contact.jsx";
 import Footer from "./sections/Footer.jsx";
 import { useSmoothScroll } from "./lib/smoothScroll.js";
-
-// three.js and post-processing ship in their own chunk so the page paints first.
-const Scene = lazy(() => import("./components/Scene/Scene.jsx"));
 
 const App = () => {
     const [ready, setReady] = useState(false);
@@ -22,24 +18,21 @@ const App = () => {
 
     return (
         <>
-            <Preloader onComplete={() => setReady(true)} />
+            <Intro onComplete={() => setReady(true)} />
             <Cursor />
-            <div className="grain" aria-hidden="true" />
-            <NavBar ready={ready} />
+            <div className="grid-lines" aria-hidden="true">
+                {Array.from({ length: 6 }, (_, i) => <span key={i} />)}
+            </div>
             <main>
                 <Hero ready={ready} />
-                <About />
+                <Statement />
                 <Work />
-                <Services />
+                <Bento />
                 <Experience />
-                <Stack />
                 <Contact />
             </main>
             <Footer />
-            {/* Rendered last so its scroll choreography is set up after the sections' pins. */}
-            <Suspense fallback={null}>
-                <Scene />
-            </Suspense>
+            <Dock ready={ready} />
         </>
     );
 };

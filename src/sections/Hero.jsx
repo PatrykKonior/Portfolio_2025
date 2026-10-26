@@ -1,72 +1,87 @@
-import { useRef } from "react";
-import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
-import { heroCopy } from "../constants/index.js";
-import Magnetic from "../components/Magnetic.jsx";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
+import { gsap, useGSAP, motionOK } from "../lib/motion.js";
+import { heroState } from "../components/Hero/heroState.js";
+
+// three.js ships in its own chunk so the page paints first.
+const GlassScene = lazy(() => import("../components/Hero/GlassScene.jsx"));
+
+const roles = ["Full-stack developer", "Elixir & Phoenix", "React & Svelte", "Node.js & .NET"];
 
 const Hero = ({ ready }) => {
     const ref = useRef(null);
+    const [visible, setVisible] = useState(true);
+
+    // Stop rendering the glass once the hero is off screen.
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting));
+        observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, []);
 
     useGSAP(() => {
-        if (!ready || !motionOK()) return;
-
-        SplitText.create(".hero-title", {
-            type: "lines,words",
-            mask: "lines",
-            linesClass: "sline",
-            autoSplit: true,
-            onSplit: (split) => gsap.from(split.words, {
-                yPercent: 115,
-                rotate: 4,
-                duration: 1.6,
-                stagger: 0.07,
-                delay: 0.15,
-            }),
-        });
-
-        gsap.from(".hero-reveal", { y: 40, opacity: 0, duration: 1.4, stagger: 0.1, delay: 0.7 });
-        gsap.from(".hero-line", { scaleX: 0, duration: 1.8, ease: "expo.inOut", delay: 0.3 });
-
-        // Parallax out as the next section arrives.
-        gsap.to(".hero-content", {
-            yPercent: -18,
-            opacity: 0.15,
+        gsap.to(heroState, {
+            progress: 1,
             ease: "none",
             scrollTrigger: { trigger: ref.current, start: "top top", end: "bottom top", scrub: true },
+        });
+
+        if (!ready || !motionOK()) return;
+
+        gsap.from(".hero-ui", { y: 24, opacity: 0, duration: 1.2, stagger: 0.08, delay: 0.5, ease: "expo.out" });
+
+        // Rotate through roles, rolling each one up and out.
+        const items = gsap.utils.toArray(".role-item");
+        gsap.set(items, { yPercent: 100, opacity: 1 });
+        gsap.set(items[0], { yPercent: 0 });
+        const cycle = gsap.timeline({ repeat: -1, delay: 2 });
+        items.forEach((item, index) => {
+            const next = items[(index + 1) % items.length];
+            cycle
+                .to(item, { yPercent: -100, duration: 0.8, ease: "expo.inOut" }, "+=1.8")
+                .fromTo(next, { yPercent: 100 }, { yPercent: 0, duration: 0.8, ease: "expo.inOut" }, "<");
+        });
+
+        gsap.to(".hero-overlay", {
+            opacity: 0,
+            y: -60,
+            ease: "none",
+            scrollTrigger: { trigger: ref.current, start: "top top", end: "50% top", scrub: true },
         });
     }, { scope: ref, dependencies: [ready] });
 
     return (
         <section id="top" ref={ref} className="hero">
-            <div className="hero-content container-x">
-                <div className="hero-top hero-reveal">
-                    <span className="mono">{heroCopy.eyebrow}</span>
-                    <span className="mono text-muted">Based in Chorzów, Poland</span>
-                </div>
-
-                <h1 className="hero-title" dangerouslySetInnerHTML={{ __html: heroCopy.title }} />
-
-                <div className="hero-line" />
-
-                <div className="hero-bottom">
-                    <p className="hero-intro hero-reveal">{heroCopy.intro}</p>
-
-                    <div className="availability hero-reveal">
-                        <span className="pulse-dot" />
-                        {heroCopy.availability}
-                    </div>
-
-                    <Magnetic className="hero-reveal" strength={0.45}>
-                        <a href="#work" className="round-button" data-cursor="Explore">
-                            <span>See work</span>
-                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
-                        </a>
-                    </Magnetic>
-                </div>
+            <div className="hero-canvas">
+                <Suspense fallback={<h1 className="hero-fallback">Patryk<br />Konior</h1>}>
+                    <GlassScene active={visible} />
+                </Suspense>
             </div>
 
-            <div className="scroll-hint mono" aria-hidden="true">
-                <span>Scroll</span>
-                <span className="scroll-hint-track"><span /></span>
+            <div className="hero-overlay">
+                <div className="hero-row">
+                    <p className="hero-ui mono">
+                        <span className="role-window">
+                            {roles.map((role) => <span key={role} className="role-item">{role}</span>)}
+                        </span>
+                    </p>
+                    <p className="hero-ui mono text-right">Chorzów, Poland<br /><span className="text-muted">50.29° N, 18.95° E</span></p>
+                </div>
+
+                <h1 className="sr-only">Patryk Konior — Full-stack Developer</h1>
+
+                <div className="hero-row hero-row-bottom">
+                    <p className="hero-ui hero-lede">
+                        I design and ship web apps end to end, from <em>database</em> to <em>pixel</em>.
+                    </p>
+                    <div className="hero-ui hero-badge glass">
+                        <span className="live-dot" />
+                        Available for new projects
+                    </div>
+                    <a href="#work" className="hero-ui hero-scroll mono" data-cursor="Scroll">
+                        Scroll to explore
+                        <span className="hero-scroll-line" />
+                    </a>
+                </div>
             </div>
         </section>
     );

@@ -3,9 +3,11 @@ import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 
 import { gsap, ScrollTrigger, motionOK } from "./motion.js";
-import { sceneState } from "./sceneState.js";
 
 let lenis = null;
+
+// Read every frame by the WebGL hero, so it lives outside React.
+export const scrollState = { velocity: 0 };
 
 export const scrollToTarget = (target) => {
     const element = typeof target === "string" ? document.querySelector(target) : target;
@@ -14,8 +16,15 @@ export const scrollToTarget = (target) => {
     else element.scrollIntoView({ behavior: motionOK() ? "smooth" : "auto" });
 };
 
+// Freezes the page behind an open drawer.
+export const lockScroll = (locked) => {
+    document.documentElement.classList.toggle("scroll-locked", locked);
+    if (locked) lenis?.stop();
+    else lenis?.start();
+};
+
 // Lenis drives the page scroll and feeds GSAP's ticker so ScrollTrigger stays in sync.
-// Scrolling is locked until `enabled` flips (the preloader is done).
+// Scrolling is locked until `enabled` flips (the intro is done).
 export const useSmoothScroll = (enabled) => {
     useEffect(() => {
         const handleAnchor = (event) => {
@@ -31,10 +40,10 @@ export const useSmoothScroll = (enabled) => {
 
         if (!motionOK()) return () => document.removeEventListener("click", handleAnchor);
 
-        lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1 });
+        lenis = new Lenis({ lerp: 0.09 });
         lenis.stop();
         lenis.on("scroll", (instance) => {
-            sceneState.velocity = instance.velocity;
+            scrollState.velocity = instance.velocity;
             ScrollTrigger.update();
         });
 

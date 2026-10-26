@@ -1,40 +1,74 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 
-import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
+import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { contactInfo } from "../constants";
 import Magnetic from "../components/Magnetic.jsx";
 import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "../components/Icons";
 
+const lines = ["Let's work", "together"];
+
+// Each letter swells in weight and width as the pointer gets close to it.
+const useProximityType = (containerRef) => {
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!motionOK() || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+    const chars = [...container.querySelectorAll(".prox-char")];
+    const pointer = { x: -9999, y: -9999 };
+    let frame = 0;
+
+    const render = () => {
+      frame = 0;
+      chars.forEach((char) => {
+        const rect = char.getBoundingClientRect();
+        const distance = Math.hypot(pointer.x - (rect.left + rect.width / 2), pointer.y - (rect.top + rect.height / 2));
+        const t = Math.max(0, 1 - distance / 420);
+        const eased = t * t * (3 - 2 * t);
+        char.style.fontVariationSettings = `"wght" ${Math.round(300 + eased * 500)}, "wdth" ${Math.round(75 + eased * 25)}`;
+      });
+    };
+
+    const handleMove = (event) => {
+      pointer.x = event.clientX;
+      pointer.y = event.clientY;
+      if (!frame) frame = requestAnimationFrame(render);
+    };
+
+    window.addEventListener("pointermove", handleMove, { passive: true });
+    return () => {
+      window.removeEventListener("pointermove", handleMove);
+      cancelAnimationFrame(frame);
+    };
+  }, [containerRef]);
+};
+
 const Contact = () => {
   const sectionRef = useRef(null);
+  const titleRef = useRef(null);
   const formRef = useRef(null);
   const [status, setStatus] = useState("idle");
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
 
+  useProximityType(titleRef);
+
   useGSAP(() => {
     if (!motionOK()) return;
-
-    SplitText.create(".contact-title", {
-      type: "lines,chars",
-      mask: "lines",
-      linesClass: "sline",
-      autoSplit: true,
-      onSplit: (split) => gsap.from(split.chars, {
-        yPercent: 120,
-        duration: 1.3,
-        stagger: 0.02,
-        scrollTrigger: { trigger: ".contact-title", start: "top 80%" },
-      }),
+    gsap.from(".prox-char", {
+      yPercent: 110,
+      duration: 1.2,
+      stagger: 0.025,
+      ease: "expo.out",
+      scrollTrigger: { trigger: titleRef.current, start: "top 80%" },
     });
-
     gsap.from(".contact-reveal", {
       y: 50,
       opacity: 0,
       duration: 1.2,
       stagger: 0.08,
-      scrollTrigger: { trigger: ".contact-grid", start: "top 80%" },
+      ease: "expo.out",
+      scrollTrigger: { trigger: ".contact-grid", start: "top 85%" },
     });
   }, { scope: sectionRef });
 
@@ -70,80 +104,77 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" ref={sectionRef} className="contact container-x section-space">
-      <div className="section-meta">
-        <span className="mono">(06)</span>
-        <span className="mono">Contact</span>
-        <span className="mono ms-auto availability-inline"><span className="pulse-dot" /> Open to projects & roles</span>
-      </div>
+    <section id="contact" ref={sectionRef} className="contact container">
+      <p className="eyebrow mono"><span className="eyebrow-index">05</span> Contact</p>
 
-      <h2 className="contact-title">
-        Let's build<br />
-        <em>something</em> great.
+      <h2 ref={titleRef} className="contact-title" aria-label={lines.join(" ")}>
+        {lines.map((line, lineIndex) => (
+          <span key={line} className="contact-line" aria-hidden="true">
+            {line.split("").map((char, index) => (
+              <span key={index} className={`prox-char ${lineIndex === 1 ? "prox-accent" : ""}`}>
+                {char === " " ? " " : char}
+              </span>
+            ))}
+          </span>
+        ))}
       </h2>
 
       <div className="contact-grid">
         <div className="contact-info">
           <div className="contact-reveal">
-            <p className="mono text-muted mb-3">Write to me</p>
+            <p className="mono text-muted">Write to me</p>
             <div className="contact-email-row">
-              <a href={`mailto:${contactInfo.email}`} className="contact-email" data-cursor="Email">
-                {contactInfo.email}
-              </a>
-              <button type="button" onClick={handleCopyEmail} className="pill" aria-label="Copy email address">
+              <a href={`mailto:${contactInfo.email}`} className="contact-email" data-cursor="Email">{contactInfo.email}</a>
+              <button type="button" onClick={handleCopyEmail} className="button-ghost" aria-label="Copy email address">
                 {copied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
                 {copied ? "Copied" : "Copy"}
               </button>
             </div>
           </div>
 
-          <ul className="contact-socials contact-reveal">
-            {[
-              { label: "LinkedIn", value: "in/patrykkonior", href: contactInfo.linkedin },
-              { label: "GitHub", value: "PatrykKonior", href: contactInfo.github },
-            ].map((link) => (
-              <li key={link.label}>
-                <a href={link.href} target="_blank" rel="noopener noreferrer" className="contact-social">
-                  <span className="mono text-muted">{link.label}</span>
-                  <span>{link.value}</span>
-                  <ArrowUpRightIcon className="size-5 contact-social-arrow" />
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className="contact-links contact-reveal">
+            <a href={contactInfo.linkedin} target="_blank" rel="noopener noreferrer" className="contact-link glass">
+              <span className="mono text-muted">LinkedIn</span>
+              <span>in/patrykkonior</span>
+              <ArrowUpRightIcon className="size-5" />
+            </a>
+            <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="contact-link glass">
+              <span className="mono text-muted">GitHub</span>
+              <span>PatrykKonior</span>
+              <ArrowUpRightIcon className="size-5" />
+            </a>
+          </div>
 
-          <dl className="contact-facts contact-reveal">
-            <div><dt className="mono text-muted">Location</dt><dd>{contactInfo.location}</dd></div>
-            <div><dt className="mono text-muted">Work mode</dt><dd>{contactInfo.workMode}</dd></div>
-            <div><dt className="mono text-muted">Languages</dt><dd>{contactInfo.languages}</dd></div>
-          </dl>
+          <p className="contact-reveal text-muted">
+            {contactInfo.location} · {contactInfo.workMode} · {contactInfo.languages}
+          </p>
         </div>
 
-        <form ref={formRef} onSubmit={handleSubmit} className="contact-form">
-          <div className="field contact-reveal">
+        <form ref={formRef} onSubmit={handleSubmit} className="contact-form glass contact-reveal">
+          <div className="field">
             <input type="text" id="name" name="name" value={form.name} onChange={handleChange} placeholder=" " required />
             <label htmlFor="name">Your name or company</label>
           </div>
-          <div className="field contact-reveal">
+          <div className="field">
             <input type="email" id="email" name="email" value={form.email} onChange={handleChange} placeholder=" " required />
             <label htmlFor="email">Email address</label>
           </div>
-          <div className="field contact-reveal">
+          <div className="field">
             <textarea id="message" name="message" value={form.message} onChange={handleChange} placeholder=" " rows="4" required />
             <label htmlFor="message">Tell me about your project or role</label>
           </div>
 
-          <div className="contact-submit contact-reveal">
+          <div className="contact-submit">
             <p role="status" aria-live="polite" className="text-sm">
               {status === "sent" && <span className="text-accent">Message sent. Thanks, I'll get back to you soon.</span>}
               {status === "error" && (
-                <span className="text-rose-400">The message couldn't be sent. Email me directly at {contactInfo.email}.</span>
+                <span className="text-rose-600">The message couldn't be sent. Email me directly at {contactInfo.email}.</span>
               )}
             </p>
-            <Magnetic strength={0.4}>
-              <button type="submit" className="round-button round-button-accent" disabled={status === "sending"}>
-                <span>{status === "sending" ? "Sending…" : "Send"}</span>
-                <ArrowUpRightIcon className="size-6" />
+            <Magnetic strength={0.35}>
+              <button type="submit" className="send-button" disabled={status === "sending"}>
+                {status === "sending" ? "Sending…" : "Send message"}
+                <ArrowUpRightIcon className="size-5" />
               </button>
             </Magnetic>
           </div>
