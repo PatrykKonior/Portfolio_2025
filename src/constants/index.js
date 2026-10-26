@@ -33,10 +33,10 @@ const aboutText =
   "I take features all the way from database schema and real-time APIs to a polished interface, then ship them with Docker and CI/CD. Three years of commercial work across Elixir, Node.js and .NET taught me that great software is equal parts clean code and clear conversations with clients.";
 
 const counterItems = [
-  { value: 3, suffix: "+", label: "Years of Commercial Experience" },
-  { value: 3, suffix: "", label: "Backend Ecosystems: Elixir, Node.js & .NET" },
-  { value: 3, suffix: "", label: "Frontend Frameworks: React, Svelte & LiveView" },
-  { value: 45, suffix: "+", label: "Technologies & Tools Used" },
+  { value: 3, suffix: "+", label: "Years of experience", detail: "Commercial, since 2024" },
+  { value: 3, suffix: "", label: "Backend ecosystems", detail: "Elixir · Node.js · .NET" },
+  { value: 3, suffix: "", label: "Frontend frameworks", detail: "React · Svelte · LiveView" },
+  { value: 45, suffix: "+", label: "Technologies & tools", detail: "And counting" },
 ];
 
 const logoIconsList = [

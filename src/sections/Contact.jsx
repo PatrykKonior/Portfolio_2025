@@ -19,6 +19,7 @@ const Contact = () => {
     SplitText.create(".contact-title", {
       type: "lines,chars",
       mask: "lines",
+      linesClass: "sline",
       autoSplit: true,
       onSplit: (split) => gsap.from(split.chars, {
         yPercent: 120,

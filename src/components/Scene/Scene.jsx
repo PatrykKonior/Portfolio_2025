@@ -18,7 +18,7 @@ const Blob = ({ detail }) => {
         uDistort: { value: 0.3 },
         uFrequency: { value: 1.05 },
         uAccent: { value: 0 },
-        uAccentColor: { value: new THREE.Color("#d4ff3a") },
+        uAccentColor: { value: new THREE.Color("#4d7cff") },
     }), []);
 
     useFrame((_, rawDelta) => {

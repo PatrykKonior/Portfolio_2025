@@ -11,6 +11,7 @@ const SectionHeading = ({ index, label, title, aside }) => {
         SplitText.create(".section-title", {
             type: "lines,words",
             mask: "lines",
+            linesClass: "sline",
             autoSplit: true,
             onSplit: (split) => gsap.from(split.words, {
                 yPercent: 110,
