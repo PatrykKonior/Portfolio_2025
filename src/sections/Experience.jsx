@@ -52,7 +52,7 @@ const ExperienceRow = ({ job, open, onToggle, id }) => {
     );
 };
 
-const Experience = () => {
+const Experience = ({ index }) => {
     const ref = useRef(null);
     const [openIndex, setOpenIndex] = useState(0);
 
@@ -69,7 +69,7 @@ const Experience = () => {
 
     return (
         <section id="experience" ref={ref} className="experience container-x section-space">
-            <SectionHeading index="04" label="Experience" title="Where I've <em>worked</em>" aside="2024 — Now" />
+            <SectionHeading index={index} label="Experience" title="Where I've <em>worked</em>" aside="2024 — Now" />
 
             <ul className="exp-list-wrap">
                 {expCards.map((job, index) => (

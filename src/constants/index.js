@@ -1,18 +1,3 @@
-const navLinks = [
-  {
-    name: "Work",
-    link: "#work",
-  },
-  {
-    name: "Experience",
-    link: "#experience",
-  },
-  {
-    name: "Services",
-    link: "#services",
-  },
-];
-
 const contactInfo = {
   email: "patrykkonior4@gmail.com",
   linkedin: "https://www.linkedin.com/in/patrykkonior/",
@@ -22,18 +7,75 @@ const contactInfo = {
   languages: "English B2/C1 · German A2",
 };
 
-const heroCopy = {
-  eyebrow: "Full-stack Developer — Portfolio ©2026",
-  title: "Building <em>web apps</em> from database to&nbsp;pixel.",
-  intro: "Hi, I'm Patryk. I design and ship production software with React, Svelte, Elixir, Node.js and .NET, and I talk directly with the people who use it.",
-  availability: "Available for new projects",
+// Set to a file in public/ (e.g. "/Patryk_Konior_CV.pdf") to turn "Request CV" into a download.
+const cvUrl = null;
+
+// Copy and navigation for the two ways into the site: clients with a project, and companies hiring.
+const audiences = {
+  clients: {
+    switchLabel: "I have a project",
+    eyebrow: "Full-stack Developer — B2B, available for projects",
+    title: "Building <em>web apps</em> from database to&nbsp;pixel.",
+    intro: "Hi, I'm Patryk. I design, build and ship web apps, APIs and internal tools for companies and startups, and I work directly with you from the first call to launch.",
+    availability: "Available for new projects",
+    primary: { label: "Start a project", href: "#contact" },
+    secondary: { label: "See work", href: "#work" },
+    nav: [
+      { name: "Services", link: "#services" },
+      { name: "Process", link: "#process" },
+      { name: "Work", link: "#work" },
+    ],
+  },
+  hiring: {
+    switchLabel: "I'm hiring",
+    eyebrow: "Full-stack Developer — open to B2B & full-time",
+    title: "Full-stack developer, <em>ready</em> to&nbsp;ship.",
+    intro: "Three years of commercial experience across Elixir & Phoenix, Node.js and .NET, with React and Svelte on the front. I own features end to end and talk to the people who use them.",
+    availability: "Open to B2B contracts & full-time roles",
+    primary: cvUrl
+      ? { label: "Download CV", href: cvUrl, download: true }
+      : { label: "Request CV", href: "mailto:patrykkonior4@gmail.com?subject=CV%20request" },
+    secondary: { label: "Experience", href: "#experience" },
+    nav: [
+      { name: "Snapshot", link: "#snapshot" },
+      { name: "Experience", link: "#experience" },
+      { name: "Work", link: "#work" },
+    ],
+  },
 };
+
+// Recruiter-facing summary for the Snapshot section.
+const quickFacts = [
+  { label: "Role", value: "Full-stack Developer" },
+  { label: "Experience", value: "3+ years commercial" },
+  { label: "Backend", value: "Elixir / Phoenix · Node.js · .NET" },
+  { label: "Frontend", value: "React · Svelte · LiveView · TypeScript" },
+  { label: "Location", value: "Chorzów, Poland · CET" },
+  { label: "Work mode", value: "Remote or on-site" },
+  { label: "Contract", value: "B2B or employment" },
+  { label: "Languages", value: "English B2/C1 · German A2" },
+];
+
+// How a client project runs, for the Process section.
+const processSteps = [
+  { title: "Intro call", desc: "A short call about your goals, users and constraints, so we know whether I'm the right fit before anyone commits." },
+  { title: "Scope & estimate", desc: "A written scope with milestones and a timeline, priced as a fixed fee or time and materials." },
+  { title: "Build in sprints", desc: "Weekly demos on a staging environment, so you see real progress and can steer early." },
+  { title: "Launch & support", desc: "Deployment with Docker and CI/CD, handover docs, and ongoing maintenance if you need it." },
+];
+
+const engagementTerms = [
+  "B2B with VAT invoice",
+  "Fixed price or time & materials",
+  "Remote, CET working hours",
+  "Direct contact, no middlemen",
+];
 
 const aboutText =
   "I take features all the way from database schema and real-time APIs to a polished interface, then ship them with Docker and CI/CD. Three years of commercial work across Elixir, Node.js and .NET taught me that great software is equal parts clean code and clear conversations with clients.";
 
 const counterItems = [
-  { value: 3, suffix: "+", label: "Years of experience", detail: "Commercial, since 2024" },
+  { value: 3, suffix: "+", label: "Years of experience", detail: "Commercial projects" },
   { value: 3, suffix: "", label: "Backend ecosystems", detail: "Elixir · Node.js · .NET" },
   { value: 3, suffix: "", label: "Frontend frameworks", detail: "React · Svelte · LiveView" },
   { value: 45, suffix: "+", label: "Technologies & tools", detail: "And counting" },
@@ -197,7 +239,11 @@ const expCards = [
 ];
 
 export {
-  heroCopy,
+  cvUrl,
+  audiences,
+  quickFacts,
+  processSteps,
+  engagementTerms,
   aboutText,
   abilities,
   logoIconsList,
@@ -206,5 +252,4 @@ export {
   projects,
   services,
   contactInfo,
-  navLinks,
 };

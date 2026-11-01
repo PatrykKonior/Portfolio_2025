@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP, motionOK } from "../lib/motion.js";
-import { navLinks, contactInfo } from "../constants/index.js";
+import { audiences, contactInfo } from "../constants/index.js";
+import { useAudience } from "../lib/audience.js";
 import useLocalTime from "../hooks/useLocalTime.js";
 import Magnetic from "./Magnetic.jsx";
 
@@ -15,6 +16,8 @@ const NavBar = ({ ready }) => {
     const menuRef = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
     const time = useLocalTime();
+    const { audience } = useAudience();
+    const navLinks = audiences[audience].nav;
 
     // Hide while scrolling down, reveal on the way up.
     useGSAP(() => {

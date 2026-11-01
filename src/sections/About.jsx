@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
 import { aboutText, abilities, counterItems } from "../constants/index.js";
 
-const About = () => {
+const About = ({ index }) => {
     const ref = useRef(null);
 
     useGSAP(() => {
@@ -43,7 +43,7 @@ const About = () => {
     return (
         <section id="about" ref={ref} className="about container-x section-space">
             <div className="section-meta">
-                <span className="mono">(01)</span>
+                <span className="mono">({index})</span>
                 <span className="mono">About</span>
             </div>
 

@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP, motionOK } from "../lib/motion.js";
-import { contactInfo, navLinks } from "../constants";
+import { audiences, contactInfo } from "../constants";
+import { useAudience } from "../lib/audience.js";
 import useLocalTime from "../hooks/useLocalTime.js";
 
 const socials = [
@@ -12,6 +13,8 @@ const socials = [
 const Footer = () => {
   const footerRef = useRef(null);
   const time = useLocalTime();
+  const { audience } = useAudience();
+  const navLinks = audiences[audience].nav;
 
   useGSAP(() => {
     if (!motionOK()) return;
