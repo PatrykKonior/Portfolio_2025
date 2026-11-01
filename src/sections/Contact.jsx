@@ -3,15 +3,70 @@ import emailjs from "@emailjs/browser";
 
 import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
 import { contactInfo } from "../constants";
+import { useAudience } from "../lib/audience.js";
 import Magnetic from "../components/Magnetic.jsx";
 import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "../components/Icons";
 
-const Contact = () => {
+// Questions that change with who is writing: a client with a project, or a company hiring.
+const formCopy = {
+  clients: {
+    status: "Booking new projects",
+    title: ["Let's build", "<em>something</em> great."],
+    nameLabel: "Your name or company",
+    messageLabel: "Tell me about your project",
+    choices: [
+      { key: "projectType", label: "What do you need?", options: ["Web app", "API & backend", "DevOps & deployment", "Performance & SEO", "Something else"] },
+      { key: "budget", label: "Budget", options: ["< €5k", "€5k–15k", "€15k+", "Not sure yet"] },
+    ],
+  },
+  hiring: {
+    status: "Open to B2B & full-time",
+    title: ["Let's talk", "about the <em>role.</em>"],
+    nameLabel: "Your name",
+    messageLabel: "Tell me about the role and the team",
+    company: true,
+    choices: [
+      { key: "contract", label: "Type of engagement", options: ["B2B contract", "Full-time employment", "Open to both"] },
+    ],
+  },
+};
+
+const ChoiceGroup = ({ choice, value, onChange }) => (
+  <fieldset className="choice-group">
+    <legend className="mono text-muted">{choice.label}</legend>
+    <div className="choice-options">
+      {choice.options.map((option) => (
+        <button
+          key={option}
+          type="button"
+          className={`choice ${value === option ? "active" : ""}`}
+          aria-pressed={value === option}
+          onClick={() => onChange(value === option ? "" : option)}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  </fieldset>
+);
+
+const Contact = ({ index }) => {
+  const { audience } = useAudience();
+  const copy = formCopy[audience];
   const sectionRef = useRef(null);
   const formRef = useRef(null);
   const [status, setStatus] = useState("idle");
   const [copied, setCopied] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", company: "", message: "" });
+  const [choices, setChoices] = useState({});
+
+  // Everything lands in the existing {{message}} template variable, so EmailJS needs no changes.
+  const details = [
+    `Visiting as: ${audience === "hiring" ? "company hiring" : "client with a project"}`,
+    ...(copy.company && form.company ? [`Company: ${form.company}`] : []),
+    ...copy.choices.filter((choice) => choices[choice.key]).map((choice) => `${choice.label}: ${choices[choice.key]}`),
+  ];
+  const composedMessage = `${details.join("\n")}\n\n${form.message}`;
 
   useGSAP(() => {
     if (!motionOK()) return;
@@ -61,7 +116,8 @@ const Contact = () => {
         import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
       );
 
-      setForm({ name: "", email: "", message: "" });
+      setForm({ name: "", email: "", company: "", message: "" });
+      setChoices({});
       setStatus("sent");
     } catch (error) {
       console.error("EmailJS Error:", error);
@@ -72,15 +128,12 @@ const Contact = () => {
   return (
     <section id="contact" ref={sectionRef} className="contact container-x section-space">
       <div className="section-meta">
-        <span className="mono">(06)</span>
+        <span className="mono">({index})</span>
         <span className="mono">Contact</span>
-        <span className="mono ms-auto availability-inline"><span className="pulse-dot" /> Open to projects & roles</span>
+        <span className="mono ms-auto availability-inline"><span className="pulse-dot" /> {copy.status}</span>
       </div>
 
-      <h2 className="contact-title">
-        Let's build<br />
-        <em>something</em> great.
-      </h2>
+      <h2 className="contact-title" dangerouslySetInnerHTML={{ __html: copy.title.join("<br />") }} />
 
       <div className="contact-grid">
         <div className="contact-info">
@@ -122,16 +175,32 @@ const Contact = () => {
         <form ref={formRef} onSubmit={handleSubmit} className="contact-form">
           <div className="field contact-reveal">
             <input type="text" id="name" name="name" value={form.name} onChange={handleChange} placeholder=" " required />
-            <label htmlFor="name">Your name or company</label>
+            <label htmlFor="name">{copy.nameLabel}</label>
           </div>
+          {copy.company && (
+            <div className="field contact-reveal">
+              <input type="text" id="company" value={form.company} name="company" onChange={handleChange} placeholder=" " />
+              <label htmlFor="company">Company</label>
+            </div>
+          )}
           <div className="field contact-reveal">
             <input type="email" id="email" name="email" value={form.email} onChange={handleChange} placeholder=" " required />
             <label htmlFor="email">Email address</label>
           </div>
+          {copy.choices.map((choice) => (
+            <div key={choice.key} className="contact-reveal">
+              <ChoiceGroup
+                choice={choice}
+                value={choices[choice.key] ?? ""}
+                onChange={(value) => setChoices({ ...choices, [choice.key]: value })}
+              />
+            </div>
+          ))}
           <div className="field contact-reveal">
-            <textarea id="message" name="message" value={form.message} onChange={handleChange} placeholder=" " rows="4" required />
-            <label htmlFor="message">Tell me about your project or role</label>
+            <textarea id="message" name="message_body" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder=" " rows="4" required />
+            <label htmlFor="message">{copy.messageLabel}</label>
           </div>
+          <input type="hidden" name="message" value={composedMessage} />
 
           <div className="contact-submit contact-reveal">
             <p role="status" aria-live="polite" className="text-sm">

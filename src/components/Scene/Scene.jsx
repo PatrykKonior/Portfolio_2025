@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { blobFragment, blobVertex } from "./shaders.js";
 import { sceneState } from "../../lib/sceneState.js";
 import { gsap, useGSAP } from "../../lib/motion.js";
+import { useAudience } from "../../lib/audience.js";
 
 const { damp } = THREE.MathUtils;
 
@@ -83,29 +84,33 @@ const Dust = ({ count }) => {
     );
 };
 
-// Where the blob sits for each section, in fractions of the half-viewport.
-const stages = {
-    desktop: [
-        [null, { x: 0.5, y: -0.02, scale: 1, distort: 0.22, accent: 0 }],
-        ["#about", { x: 0.62, y: -0.4, scale: 0.7, distort: 0.38, accent: 0.35 }],
-        ["#work", { x: 0.72, y: 0.58, scale: 0.32, distort: 0.18, accent: 1 }],
-        ["#services", { x: -0.66, y: -0.1, scale: 0.8, distort: 0.45, accent: 0.2 }],
-        ["#experience", { x: 0.74, y: -0.45, scale: 0.45, distort: 0.3, accent: 0.6 }],
-        ["#contact", { x: 0.55, y: 0.05, scale: 1, distort: 0.32, accent: 1 }],
-        [".footer", { x: 0, y: -0.45, scale: 0.75, distort: 0.28, accent: 0.5 }],
-    ],
-    mobile: [
-        [null, { x: 0.25, y: 0.35, scale: 0.85, distort: 0.22, accent: 0 }],
-        ["#about", { x: 0.45, y: -0.5, scale: 0.6, distort: 0.35, accent: 0.35 }],
-        ["#work", { x: 0.55, y: 0.6, scale: 0.35, distort: 0.18, accent: 1 }],
-        ["#services", { x: -0.5, y: -0.45, scale: 0.6, distort: 0.4, accent: 0.2 }],
-        ["#experience", { x: 0.5, y: 0.55, scale: 0.45, distort: 0.3, accent: 0.6 }],
-        ["#contact", { x: 0.35, y: -0.45, scale: 0.75, distort: 0.32, accent: 1 }],
-        [".footer", { x: 0, y: -0.5, scale: 0.6, distort: 0.28, accent: 0.5 }],
-    ],
+// Where the blob sits for each section, in fractions of the half-viewport. The page order depends
+// on the audience, so the stages are sequenced by where each section actually is in the DOM.
+const hero = {
+    desktop: { x: 0.5, y: -0.02, scale: 1, distort: 0.22, accent: 0 },
+    mobile: { x: 0.25, y: 0.35, scale: 0.85, distort: 0.22, accent: 0 },
 };
 
+const sectionStages = {
+    "#about": { desktop: { x: 0.62, y: -0.4, scale: 0.7, distort: 0.38, accent: 0.35 }, mobile: { x: 0.45, y: -0.5, scale: 0.6, distort: 0.35, accent: 0.35 } },
+    "#snapshot": { desktop: { x: 0.68, y: 0.3, scale: 0.55, distort: 0.3, accent: 0.7 }, mobile: { x: 0.5, y: 0.55, scale: 0.45, distort: 0.3, accent: 0.7 } },
+    "#services": { desktop: { x: -0.66, y: -0.1, scale: 0.8, distort: 0.45, accent: 0.2 }, mobile: { x: -0.5, y: -0.45, scale: 0.6, distort: 0.4, accent: 0.2 } },
+    "#process": { desktop: { x: 0.7, y: -0.45, scale: 0.5, distort: 0.35, accent: 0.8 }, mobile: { x: 0.5, y: -0.55, scale: 0.45, distort: 0.35, accent: 0.8 } },
+    "#work": { desktop: { x: 0.72, y: 0.58, scale: 0.32, distort: 0.18, accent: 1 }, mobile: { x: 0.55, y: 0.6, scale: 0.35, distort: 0.18, accent: 1 } },
+    "#experience": { desktop: { x: 0.74, y: -0.45, scale: 0.45, distort: 0.3, accent: 0.6 }, mobile: { x: 0.5, y: 0.55, scale: 0.45, distort: 0.3, accent: 0.6 } },
+    "#stack": { desktop: { x: -0.6, y: 0.35, scale: 0.6, distort: 0.4, accent: 0.4 }, mobile: { x: -0.45, y: 0.5, scale: 0.5, distort: 0.4, accent: 0.4 } },
+    "#contact": { desktop: { x: 0.55, y: 0.05, scale: 1, distort: 0.32, accent: 1 }, mobile: { x: 0.35, y: -0.45, scale: 0.75, distort: 0.32, accent: 1 } },
+    ".footer": { desktop: { x: 0, y: -0.45, scale: 0.75, distort: 0.28, accent: 0.5 }, mobile: { x: 0, y: -0.5, scale: 0.6, distort: 0.28, accent: 0.5 } },
+};
+
+const orderedStages = (device) => Object.keys(sectionStages)
+    .map((selector) => ({ selector, element: document.querySelector(selector) }))
+    .filter(({ element }) => element)
+    .sort((a, b) => (a.element.compareDocumentPosition(b.element) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1))
+    .map(({ selector }) => [selector, sectionStages[selector][device]]);
+
 const Scene = () => {
+    const { audience } = useAudience();
     const isDesktop = useMemo(() => window.matchMedia("(min-width: 1024px)").matches, []);
 
     useEffect(() => {
@@ -121,7 +126,8 @@ const Scene = () => {
     useGSAP(() => {
         const mm = gsap.matchMedia();
         mm.add({ desktop: "(min-width: 1024px)", mobile: "(max-width: 1023px)" }, ({ conditions }) => {
-            const list = conditions.desktop ? stages.desktop : stages.mobile;
+            const device = conditions.desktop ? "desktop" : "mobile";
+            const list = [[null, hero[device]], ...orderedStages(device)];
             gsap.set(sceneState.blob, list[0][1]);
             list.slice(1).forEach(([selector, to], index) => {
                 gsap.fromTo(sceneState.blob, { ...list[index][1] }, {
@@ -132,7 +138,7 @@ const Scene = () => {
                 });
             });
         });
-    });
+    }, { dependencies: [audience] });
 
     return (
         <div className="scene" aria-hidden="true">

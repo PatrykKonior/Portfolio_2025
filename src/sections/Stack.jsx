@@ -19,7 +19,7 @@ const Row = ({ items, className }) => (
 );
 
 // Two marquees running in opposite directions; scroll speed speeds them up and flips them.
-const Stack = () => {
+const Stack = ({ index }) => {
     const ref = useRef(null);
     const half = Math.ceil(logoIconsList.length / 2);
 
@@ -62,9 +62,9 @@ const Stack = () => {
     }, { scope: ref });
 
     return (
-        <section ref={ref} className="stack section-space" aria-label="Tech stack">
+        <section id="stack" ref={ref} className="stack section-space" aria-label="Tech stack">
             <div className="container-x section-meta">
-                <span className="mono">(05)</span>
+                <span className="mono">({index})</span>
                 <span className="mono">Toolbox</span>
                 <span className="mono ms-auto text-muted">45+ technologies</span>
             </div>

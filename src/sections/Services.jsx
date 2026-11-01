@@ -3,7 +3,7 @@ import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { services } from "../constants/index.js";
 import SectionHeading from "../components/SectionHeading.jsx";
 
-const Services = () => {
+const Services = ({ index }) => {
     const ref = useRef(null);
 
     useGSAP(() => {
@@ -35,7 +35,7 @@ const Services = () => {
 
     return (
         <section id="services" ref={ref} className="services container-x section-space">
-            <SectionHeading index="03" label="Services" title="What I can <em>build</em> for you" />
+            <SectionHeading index={index} label="Services" title="What I can <em>build</em> for you" />
 
             <div className="service-stack">
                 {services.map((service, index) => (

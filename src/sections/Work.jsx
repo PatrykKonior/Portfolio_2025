@@ -31,7 +31,7 @@ const ProjectCard = ({ project, index }) => (
     </article>
 );
 
-const Work = () => {
+const Work = ({ index }) => {
     const sectionRef = useRef(null);
     const trackRef = useRef(null);
 
@@ -97,7 +97,7 @@ const Work = () => {
             <div className="work-pin">
                 <div className="container-x">
                     <SectionHeading
-                        index="02"
+                        index={index}
                         label="Selected work"
                         title="Selected <em>work</em>"
                         aside={`${String(projects.length).padStart(2, "0")} projects`}

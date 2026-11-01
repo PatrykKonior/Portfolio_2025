@@ -10,6 +10,15 @@ Personal portfolio and client site. React 19 + Vite, with a WebGL scene in React
 - Custom cursor, magnetic buttons, film grain; everything falls back gracefully with `prefers-reduced-motion`.
 - Three.js loads in its own chunk so the page paints first.
 
+## Two audiences, one site
+
+A switch in the hero changes who the page is for, reordering the sections and adapting the copy, CTAs, navigation and contact form:
+
+- `/?for=clients` (default): services, how a B2B project runs, work, experience. The form asks for project type and budget.
+- `/?for=hiring`: a recruiter snapshot with a CV button, experience, work. The form asks for company and type of engagement.
+
+Send the matching link with offers or applications. To offer a CV download, drop the PDF in `public/` and set `cvUrl` in `src/constants/index.js`; until then the button opens an email.
+
 ## Scripts
 
 ```bash
