@@ -91,7 +91,7 @@ const Contact = () => {
           <div className="contact-reveal">
             <p className="mono text-muted mb-3">{copy.writeToMe}</p>
             <div className="contact-email-row">
-              <a href={`mailto:${contactInfo.email}`} className="contact-email" data-cursor="Email">
+              <a href={`mailto:${contactInfo.email}`} className="contact-email" data-cursor={copy.emailCursor}>
                 {contactInfo.email}
               </a>
               <button type="button" onClick={handleCopyEmail} className="pill" aria-label={copy.copyAria}>

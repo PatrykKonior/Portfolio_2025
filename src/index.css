@@ -22,6 +22,8 @@
 }
 
 html {
+    /* Keeps wide content (the sideways Work track) from widening the page on touch devices. */
+    overflow-x: clip;
     background: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
@@ -1121,7 +1123,8 @@ a:hover .roll::after {
     .nav-cta { display: inline-flex; }
 }
 
-@media (min-width: 1024px) {
+/* Full navigation only where it fits in both languages; tablets keep the menu button. */
+@media (min-width: 1200px) {
     .nav-links { display: flex; }
     .menu-toggle,
     .mobile-menu { display: none; }
@@ -1158,7 +1161,7 @@ a:hover .roll::after {
 
 .hero-title {
     max-width: 16ch;
-    font-size: clamp(3.1rem, 9.6vw, 10.5rem);
+    font-size: clamp(2.8rem, 8.4vw, 9.25rem);
     font-weight: 500;
     line-height: 0.92;
     letter-spacing: -0.055em;
@@ -1203,10 +1206,25 @@ a:hover .roll::after {
     backdrop-filter: blur(12px);
 }
 
+/* Tablets: the intro gets its own row, with status, CV and the round button underneath. */
 @media (min-width: 768px) {
     .hero-bottom {
+        grid-template-columns: 1fr auto;
+        gap: 2rem 3rem;
+    }
+
+    .hero-intro {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (min-width: 1200px) {
+    .hero-bottom {
         grid-template-columns: 1fr auto auto;
-        gap: 3rem;
+    }
+
+    .hero-intro {
+        grid-column: auto;
     }
 }
 
@@ -1353,6 +1371,10 @@ a:hover .roll::after {
 }
 
 /* ---------- Work ---------- */
+
+.work {
+    overflow-x: clip;
+}
 
 .work-pin {
     display: flex;

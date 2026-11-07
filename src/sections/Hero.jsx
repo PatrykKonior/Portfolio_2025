@@ -64,7 +64,7 @@ const Hero = ({ ready }) => {
                     </div>
 
                     <Magnetic className="hero-reveal" strength={0.45}>
-                        <a href="#work" className="round-button" data-cursor="Explore">
+                        <a href="#work" className="round-button" data-cursor={heroCopy.cursor}>
                             <span>{heroCopy.cta}</span>
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
                         </a>
