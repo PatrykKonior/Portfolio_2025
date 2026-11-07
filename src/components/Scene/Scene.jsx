@@ -1,15 +1,17 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 
 import { blobFragment, blobVertex } from "./shaders.js";
 import { sceneState } from "../../lib/sceneState.js";
-import { gsap, useGSAP } from "../../lib/motion.js";
+import { gsap, useGSAP, motionOK } from "../../lib/motion.js";
+import { useLanguage } from "../../i18n/index.js";
+import StaticBlob from "./StaticBlob.jsx";
 
 const { damp } = THREE.MathUtils;
 
-const Blob = ({ detail }) => {
+const Blob = ({ detail, still }) => {
     const mesh = useRef(null);
     const viewport = useThree((state) => state.viewport);
 
@@ -26,7 +28,8 @@ const Blob = ({ detail }) => {
         const { blob, pointer, velocity, intro } = sceneState;
         const speed = Math.min(Math.abs(velocity) * 0.02, 1.4);
 
-        uniforms.uTime.value += delta * (0.4 + speed);
+        // With reduced motion the blob keeps its shape and only follows the scroll.
+        if (!still) uniforms.uTime.value += delta * (0.4 + speed);
         uniforms.uDistort.value = damp(uniforms.uDistort.value, blob.distort + speed * 0.18, 4, delta);
         uniforms.uAccent.value = damp(uniforms.uAccent.value, blob.accent, 3, delta);
 
@@ -38,7 +41,7 @@ const Blob = ({ detail }) => {
         const scale = blob.scale * fit * (0.2 + 0.8 * intro);
         target.scale.setScalar(damp(target.scale.x, scale, 3, delta));
 
-        target.rotation.y += delta * 0.12;
+        if (!still) target.rotation.y += delta * 0.12;
         target.rotation.x = damp(target.rotation.x, -pointer.y * 0.5, 2, delta);
         target.rotation.z = damp(target.rotation.z, pointer.x * 0.3, 2, delta);
     });
@@ -105,8 +108,59 @@ const stages = {
     ],
 };
 
+const hasWebGL = () => {
+    try {
+        const canvas = document.createElement("canvas");
+        return Boolean(canvas.getContext("webgl2") || canvas.getContext("webgl"));
+    } catch {
+        return false;
+    }
+};
+
+// Measures the frame rate for three seconds (after the intro and a one-second warm-up) and
+// reports it once. Remounted per quality level, so each level gets its own measurement.
+const FrameRateProbe = ({ onMeasured }) => {
+    const sample = useRef({ warm: 0, frames: 0, time: 0, done: false });
+
+    useFrame((_, delta) => {
+        const probe = sample.current;
+        if (probe.done || sceneState.intro < 0.95 || document.hidden) return;
+        if (probe.warm < 1) {
+            probe.warm += delta;
+            return;
+        }
+        probe.frames += 1;
+        probe.time += delta;
+        if (probe.time >= 3) {
+            probe.done = true;
+            onMeasured(probe.frames / probe.time);
+        }
+    });
+
+    return null;
+};
+
+// Quality steps down only when the device clearly struggles: first a lighter scene, and only if
+// that is still choppy, a pre-rendered image of the blob. ?lite forces the image, ?full skips the checks.
+const initialQuality = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("lite") || !hasWebGL()) return "static";
+    return "high";
+};
+
 const Scene = () => {
     const isDesktop = useMemo(() => window.matchMedia("(min-width: 1024px)").matches, []);
+    const still = useMemo(() => !motionOK(), []);
+    const probing = useMemo(() => !new URLSearchParams(window.location.search).has("full"), []);
+    const [quality, setQuality] = useState(initialQuality);
+    const { lang } = useLanguage();
+
+    const handleFrameRate = useCallback((fps) => {
+        if (quality === "high" && fps < 25) setQuality("low");
+        else if (quality === "low" && fps < 20) setQuality("static");
+    }, [quality]);
+
+    const lite = quality === "low";
 
     useEffect(() => {
         const handlePointer = (event) => {
@@ -132,18 +186,21 @@ const Scene = () => {
                 });
             });
         });
-    });
+    }, { dependencies: [lang] });
+
+    if (quality === "static") return <StaticBlob />;
 
     return (
         <div className="scene" aria-hidden="true">
             <Canvas
-                dpr={[1, isDesktop ? 1.75 : 1.25]}
+                dpr={lite ? 1 : [1, isDesktop ? 1.75 : 1.25]}
                 camera={{ position: [0, 0, 6], fov: 35 }}
                 gl={{ antialias: true, powerPreference: "high-performance" }}
             >
-                <Blob detail={isDesktop ? 96 : 40} />
-                <Dust count={isDesktop ? 1400 : 500} />
-                {isDesktop && (
+                <Blob detail={lite ? 32 : isDesktop ? 96 : 40} still={still} />
+                <Dust count={lite ? 400 : isDesktop ? 1400 : 500} />
+                {probing && quality !== "static" && <FrameRateProbe key={quality} onMeasured={handleFrameRate} />}
+                {isDesktop && !lite && (
                     <EffectComposer multisampling={0}>
                         <Bloom intensity={0.55} luminanceThreshold={0.55} luminanceSmoothing={0.3} mipmapBlur />
                     </EffectComposer>

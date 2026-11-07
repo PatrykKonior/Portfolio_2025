@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { gsap, ScrollTrigger, useGSAP, motionOK } from "../lib/motion.js";
 import { logoIconsList } from "../constants/index.js";
+import { useLanguage } from "../i18n/index.js";
 
 const Row = ({ items, className }) => (
     <div className={`marquee-row ${className}`}>
@@ -21,6 +22,7 @@ const Row = ({ items, className }) => (
 // Two marquees running in opposite directions; scroll speed speeds them up and flips them.
 const Stack = () => {
     const ref = useRef(null);
+    const { t } = useLanguage();
     const half = Math.ceil(logoIconsList.length / 2);
 
     useGSAP(() => {
@@ -62,11 +64,11 @@ const Stack = () => {
     }, { scope: ref });
 
     return (
-        <section ref={ref} className="stack section-space" aria-label="Tech stack">
+        <section ref={ref} className="stack section-space" aria-label={t.stack.aria}>
             <div className="container-x section-meta">
                 <span className="mono">(05)</span>
-                <span className="mono">Toolbox</span>
-                <span className="mono ms-auto text-muted">45+ technologies</span>
+                <span className="mono">{t.stack.label}</span>
+                <span className="mono ms-auto text-muted">{t.stack.count}</span>
             </div>
             <div className="marquee">
                 <Row items={logoIconsList.slice(0, half)} className="" />

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { expCards } from "../constants/index.js";
+import { useLanguage } from "../i18n/index.js";
 import SectionHeading from "../components/SectionHeading.jsx";
 
 const ExperienceRow = ({ job, open, onToggle, id }) => {
@@ -55,6 +56,7 @@ const ExperienceRow = ({ job, open, onToggle, id }) => {
 const Experience = () => {
     const ref = useRef(null);
     const [openIndex, setOpenIndex] = useState(0);
+    const { t } = useLanguage();
 
     useGSAP(() => {
         if (!motionOK()) return;
@@ -69,14 +71,14 @@ const Experience = () => {
 
     return (
         <section id="experience" ref={ref} className="experience container-x section-space">
-            <SectionHeading index="04" label="Experience" title="Where I've <em>worked</em>" aside="2024 — Now" />
+            <SectionHeading index="04" label={t.experience.label} title={t.experience.title} aside={t.experience.aside} />
 
             <ul className="exp-list-wrap">
                 {expCards.map((job, index) => (
                     <ExperienceRow
-                        key={job.title}
+                        key={index}
                         id={`exp-panel-${index}`}
-                        job={job}
+                        job={{ ...job, ...t.experience.jobs[index] }}
                         open={openIndex === index}
                         onToggle={() => setOpenIndex(openIndex === index ? -1 : index)}
                     />

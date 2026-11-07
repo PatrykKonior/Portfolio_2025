@@ -1,8 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300..800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
 @theme {
-    --font-sans: "Inter Tight", system-ui, sans-serif;
+    --font-sans: "Inter Tight Variable", system-ui, sans-serif;
     --font-serif: "Instrument Serif", Georgia, serif;
     --font-mono: "JetBrains Mono", ui-monospace, monospace;
     --color-accent: #4d7cff;
@@ -250,7 +249,303 @@ a:hover .roll::after {
     margin-bottom: -0.14em;
 }
 
+/* ---------- Language switch & curtain ---------- */
+
+.lang-switch {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0.25rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(10, 10, 11, 0.45);
+    backdrop-filter: blur(14px);
+    isolation: isolate;
+}
+
+.lang-thumb {
+    position: absolute;
+    inset: 0.25rem auto 0.25rem 0.25rem;
+    z-index: -1;
+    width: calc(50% - 0.25rem);
+    border-radius: 999px;
+    background: var(--fg);
+    transform: translateX(calc(var(--active) * 100%));
+    transition: transform 0.6s var(--ease-out);
+}
+
+.lang-switch button {
+    min-width: 2.4rem;
+    padding: 0.5rem 0.6rem;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    transition: color 0.4s var(--ease-out);
+}
+
+.lang-switch button:hover {
+    color: var(--fg);
+}
+
+.lang-switch button.active {
+    color: var(--bg);
+}
+
+.lang-curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 97;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--gutter);
+    padding-top: 6rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    clip-path: inset(100% 0% 0% 0%);
+}
+
+.curtain-code {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    font-size: clamp(9rem, 38vw, 34rem);
+    font-weight: 600;
+    letter-spacing: -0.07em;
+    line-height: 0.85;
+}
+
+.curtain-char {
+    display: inline-block;
+    padding-bottom: 0.05em;
+}
+
+.curtain-meta {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* ---------- CV, consent note, footer legal ---------- */
+
+.hero-status {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.cv-pill {
+    justify-self: start;
+}
+
+.consent-note {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--muted);
+}
+
+.text-link,
+.footer-link-button {
+    color: var(--fg);
+    text-decoration: underline;
+    text-decoration-color: rgba(236, 235, 230, 0.35);
+    text-underline-offset: 0.2em;
+    transition: color 0.3s, text-decoration-color 0.3s;
+}
+
+.text-link:hover,
+.footer-link-button:hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+}
+
+.footer-link-button {
+    color: inherit;
+    text-transform: inherit;
+    letter-spacing: inherit;
+}
+
+.footer-legal {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+}
+
+/* ---------- Privacy dialog ---------- */
+
+.privacy {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+}
+
+.privacy-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(5, 5, 6, 0.7);
+    backdrop-filter: blur(6px);
+}
+
+.privacy-panel {
+    position: relative;
+    width: min(46rem, 100%);
+    max-height: min(85vh, 56rem);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    border: 1px solid var(--line);
+    border-radius: 1.75rem;
+    background: rgba(18, 18, 20, 0.92);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8);
+}
+
+.privacy-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.privacy-close {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition: transform 0.5s var(--ease-out), background-color 0.4s, color 0.4s;
+}
+
+.privacy-close:hover {
+    transform: rotate(90deg);
+    background: var(--fg);
+    color: var(--bg);
+}
+
+.privacy-title {
+    font-size: clamp(2.25rem, 5vw, 3.75rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+}
+
+.privacy-section {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.75rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+}
+
+.privacy-section h3 {
+    font-size: 1.15rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+}
+
+.privacy-section p {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+/* ---------- Cookie consent (vanilla-cookieconsent), restyled to match ---------- */
+
+#cc-main {
+    --cc-font-family: var(--font-sans);
+    --cc-bg: rgba(18, 18, 20, 0.88);
+    --cc-primary-color: var(--fg);
+    --cc-secondary-color: var(--muted);
+    --cc-btn-primary-bg: var(--accent);
+    --cc-btn-primary-color: #fff;
+    --cc-btn-primary-border-color: var(--accent);
+    --cc-btn-primary-hover-bg: var(--fg);
+    --cc-btn-primary-hover-color: var(--bg);
+    --cc-btn-primary-hover-border-color: var(--fg);
+    --cc-btn-secondary-bg: transparent;
+    --cc-btn-secondary-color: var(--fg);
+    --cc-btn-secondary-border-color: var(--line);
+    --cc-btn-secondary-hover-bg: rgba(236, 235, 230, 0.08);
+    --cc-btn-secondary-hover-color: var(--fg);
+    --cc-btn-secondary-hover-border-color: rgba(236, 235, 230, 0.3);
+    --cc-separator-border-color: var(--line);
+    --cc-toggle-on-bg: var(--accent);
+    --cc-toggle-off-bg: #3a3a40;
+    --cc-toggle-on-knob-bg: #fff;
+    --cc-toggle-off-knob-bg: var(--fg);
+    --cc-toggle-readonly-bg: #2a2a30;
+    --cc-toggle-readonly-knob-bg: var(--muted);
+    --cc-cookie-category-block-bg: rgba(236, 235, 230, 0.04);
+    --cc-cookie-category-block-border: var(--line);
+    --cc-cookie-category-block-hover-bg: rgba(236, 235, 230, 0.07);
+    --cc-cookie-category-block-hover-border: var(--line);
+    --cc-cookie-category-expanded-block-bg: transparent;
+    --cc-section-category-border: var(--line);
+    --cc-overlay-bg: rgba(5, 5, 6, 0.7);
+    --cc-modal-border-radius: 1.5rem;
+    --cc-btn-border-radius: 999px;
+    --cc-modal-transition-duration: 0.01s;
+    --cc-link-color: var(--fg);
+}
+
+#cc-main .cm,
+#cc-main .pm {
+    border: 1px solid var(--line);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8);
+}
+
+/* The library gives the box-layout preferences modal a fixed height; let it hug its content. */
+#cc-main .pm.pm--box {
+    height: auto;
+}
+
+#cc-main .cm__title,
+#cc-main .pm__title {
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+}
+
+#cc-main .cm__title::before {
+    content: "Cookies";
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+#cc-main .cm__btn,
+#cc-main .pm__btn {
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: background-color 0.4s var(--ease-out), color 0.4s var(--ease-out), border-color 0.4s var(--ease-out);
+}
+
 /* ---------- Global layers ---------- */
+
+.static-blob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: none;
+    width: 0;
+    will-change: transform, width;
+}
 
 .scene {
     position: fixed;

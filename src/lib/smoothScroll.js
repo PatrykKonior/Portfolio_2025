@@ -14,6 +14,19 @@ export const scrollToTarget = (target) => {
     else element.scrollIntoView({ behavior: motionOK() ? "smooth" : "auto" });
 };
 
+// Jumps straight to a scroll position, e.g. to keep the reader's place after a language switch.
+export const jumpTo = (y) => {
+    if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
+    else window.scrollTo(0, y);
+};
+
+// Freezes the page behind an open dialog.
+export const lockScroll = (locked) => {
+    document.documentElement.classList.toggle("scroll-locked", locked);
+    if (locked) lenis?.stop();
+    else lenis?.start();
+};
+
 // Lenis drives the page scroll and feeds GSAP's ticker so ScrollTrigger stays in sync.
 // Scrolling is locked until `enabled` flips (the preloader is done).
 export const useSmoothScroll = (enabled) => {

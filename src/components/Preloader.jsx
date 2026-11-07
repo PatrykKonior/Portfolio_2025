@@ -1,10 +1,12 @@
 import { useRef } from "react";
 import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { sceneState } from "../lib/sceneState.js";
+import { useLanguage } from "../i18n/index.js";
 
 const Preloader = ({ onComplete }) => {
     const rootRef = useRef(null);
     const countRef = useRef(null);
+    const { t } = useLanguage();
 
     useGSAP(() => {
         if (!motionOK()) {
@@ -42,7 +44,7 @@ const Preloader = ({ onComplete }) => {
                 ))}
             </div>
             <div className="preloader-meta">
-                <span>Portfolio ©2026</span>
+                <span>{t.preloader}</span>
                 <span ref={countRef} className="preloader-count">000</span>
             </div>
             <div className="preloader-bar" />

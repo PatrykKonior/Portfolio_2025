@@ -1,10 +1,12 @@
 import { useRef } from "react";
 import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { services } from "../constants/index.js";
+import { useLanguage } from "../i18n/index.js";
 import SectionHeading from "../components/SectionHeading.jsx";
 
 const Services = () => {
     const ref = useRef(null);
+    const { t } = useLanguage();
 
     useGSAP(() => {
         if (!motionOK()) return;
@@ -35,11 +37,11 @@ const Services = () => {
 
     return (
         <section id="services" ref={ref} className="services container-x section-space">
-            <SectionHeading index="03" label="Services" title="What I can <em>build</em> for you" />
+            <SectionHeading index="03" label={t.services.label} title={t.services.title} />
 
             <div className="service-stack">
                 {services.map((service, index) => (
-                    <div key={service.title} className="service-card" style={{ "--i": index }}>
+                    <div key={index} className="service-card" style={{ "--i": index }}>
                         <article className={`service-card-inner tone-${index % 4}`}>
                             <div className="service-card-top">
                                 <span className="service-number">0{index + 1}</span>
@@ -50,10 +52,10 @@ const Services = () => {
                                 </div>
                             </div>
                             <div className="service-card-body">
-                                <h3>{service.title}</h3>
-                                <p>{service.desc}</p>
+                                <h3>{t.services.items[index].title}</h3>
+                                <p>{t.services.items[index].desc}</p>
                                 <ul className="service-points">
-                                    {service.points.map((point) => <li key={point}>{point}</li>)}
+                                    {t.services.items[index].points.map((point) => <li key={point}>{point}</li>)}
                                 </ul>
                             </div>
                         </article>

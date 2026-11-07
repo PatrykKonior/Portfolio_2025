@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, useGSAP, motionOK } from "../lib/motion.js";
-import { navLinks, contactInfo } from "../constants/index.js";
+import { contactInfo } from "../constants/index.js";
+import { useLanguage } from "../i18n/index.js";
 import useLocalTime from "../hooks/useLocalTime.js";
 import Magnetic from "./Magnetic.jsx";
+import LanguageSwitch from "./LanguageSwitch.jsx";
 
 const RollText = ({ children }) => (
     <span className="roll" data-text={children}>
@@ -15,6 +17,8 @@ const NavBar = ({ ready }) => {
     const menuRef = useRef(null);
     const [menuOpen, setMenuOpen] = useState(false);
     const time = useLocalTime();
+    const { t } = useLanguage();
+    const navLinks = t.nav.links;
 
     // Hide while scrolling down, reveal on the way up.
     useGSAP(() => {
@@ -56,13 +60,13 @@ const NavBar = ({ ready }) => {
                 <a href="#top" className="nav-item nav-logo" onClick={closeMenu}>
                     <span className="nav-logo-mark">PK</span>
                     <span className="nav-logo-text">
-                        Patryk Konior<span className="text-muted"> — Full-stack Dev</span>
+                        Patryk Konior<span className="text-muted"> — {t.nav.role}</span>
                     </span>
                 </a>
 
                 <nav className="nav-links" aria-label="Main">
                     {navLinks.map(({ name, link }, index) => (
-                        <a key={name} href={link} className="nav-item nav-link">
+                        <a key={link} href={link} className="nav-item nav-link">
                             <span className="mono text-muted">0{index + 1}</span>
                             <RollText>{name}</RollText>
                         </a>
@@ -73,16 +77,17 @@ const NavBar = ({ ready }) => {
                     <span className="nav-item nav-time mono">
                         <span className="pulse-dot" /> Chorzów {time}
                     </span>
+                    <LanguageSwitch className="nav-item" />
                     <Magnetic className="nav-item">
                         <a href="#contact" className="pill pill-accent nav-cta" onClick={closeMenu}>
-                            <RollText>Let's talk</RollText>
+                            <RollText>{t.nav.cta}</RollText>
                         </a>
                     </Magnetic>
                     <button
                         type="button"
                         className={`nav-item menu-toggle ${menuOpen ? "open" : ""}`}
                         onClick={() => setMenuOpen((open) => !open)}
-                        aria-label={menuOpen ? "Close menu" : "Open menu"}
+                        aria-label={menuOpen ? t.nav.closeMenu : t.nav.openMenu}
                         aria-expanded={menuOpen}
                         aria-controls="mobile-menu"
                     >
@@ -100,8 +105,8 @@ const NavBar = ({ ready }) => {
                 aria-hidden={!menuOpen}
             >
                 <ul>
-                    {[...navLinks, { name: "Contact", link: "#contact" }].map(({ name, link }, index) => (
-                        <li key={name} className="menu-link">
+                    {[...navLinks, { name: t.nav.contact, link: "#contact" }].map(({ name, link }, index) => (
+                        <li key={link} className="menu-link">
                             <a href={link} onClick={closeMenu} tabIndex={menuOpen ? 0 : -1}>
                                 <span className="menu-link-inner">
                                     <span className="mono text-muted">0{index + 1}</span>

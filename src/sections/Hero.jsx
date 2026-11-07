@@ -1,10 +1,14 @@
 import { useRef } from "react";
 import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
-import { heroCopy } from "../constants/index.js";
+import { useLanguage } from "../i18n/index.js";
+import useCvUrl from "../hooks/useCvUrl.js";
 import Magnetic from "../components/Magnetic.jsx";
 
 const Hero = ({ ready }) => {
     const ref = useRef(null);
+    const { lang, t } = useLanguage();
+    const heroCopy = t.hero;
+    const cvUrl = useCvUrl(lang);
 
     useGSAP(() => {
         if (!ready || !motionOK()) return;
@@ -40,7 +44,7 @@ const Hero = ({ ready }) => {
             <div className="hero-content container-x">
                 <div className="hero-top hero-reveal">
                     <span className="mono">{heroCopy.eyebrow}</span>
-                    <span className="mono text-muted">Based in Chorzów, Poland</span>
+                    <span className="mono text-muted">{heroCopy.location}</span>
                 </div>
 
                 <h1 className="hero-title" dangerouslySetInnerHTML={{ __html: heroCopy.title }} />
@@ -50,14 +54,21 @@ const Hero = ({ ready }) => {
                 <div className="hero-bottom">
                     <p className="hero-intro hero-reveal">{heroCopy.intro}</p>
 
-                    <div className="availability hero-reveal">
-                        <span className="pulse-dot" />
-                        {heroCopy.availability}
+                    <div className="hero-status hero-reveal">
+                        <div className="availability">
+                            <span className="pulse-dot" />
+                            {heroCopy.availability}
+                        </div>
+                        {cvUrl && (
+                            <a href={cvUrl} download className="pill cv-pill">
+                                {heroCopy.cv} <span aria-hidden="true">↓</span>
+                            </a>
+                        )}
                     </div>
 
                     <Magnetic className="hero-reveal" strength={0.45}>
                         <a href="#work" className="round-button" data-cursor="Explore">
-                            <span>See work</span>
+                            <span>{heroCopy.cta}</span>
                             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
                         </a>
                     </Magnetic>
@@ -65,7 +76,7 @@ const Hero = ({ ready }) => {
             </div>
 
             <div className="scroll-hint mono" aria-hidden="true">
-                <span>Scroll</span>
+                <span>{heroCopy.scroll}</span>
                 <span className="scroll-hint-track"><span /></span>
             </div>
         </section>

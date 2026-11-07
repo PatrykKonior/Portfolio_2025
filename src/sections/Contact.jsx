@@ -3,12 +3,18 @@ import emailjs from "@emailjs/browser";
 
 import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
 import { contactInfo } from "../constants";
+import { useLanguage } from "../i18n/index.js";
+import useCvUrl from "../hooks/useCvUrl.js";
+import { openPrivacy } from "../lib/privacy.js";
 import Magnetic from "../components/Magnetic.jsx";
 import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "../components/Icons";
 
 const Contact = () => {
   const sectionRef = useRef(null);
   const formRef = useRef(null);
+  const { lang, t } = useLanguage();
+  const copy = t.contact;
+  const cvUrl = useCvUrl(lang);
   const [status, setStatus] = useState("idle");
   const [copied, setCopied] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -73,26 +79,23 @@ const Contact = () => {
     <section id="contact" ref={sectionRef} className="contact container-x section-space">
       <div className="section-meta">
         <span className="mono">(06)</span>
-        <span className="mono">Contact</span>
-        <span className="mono ms-auto availability-inline"><span className="pulse-dot" /> Open to projects & roles</span>
+        <span className="mono">{copy.label}</span>
+        <span className="mono ms-auto availability-inline"><span className="pulse-dot" /> {copy.status}</span>
       </div>
 
-      <h2 className="contact-title">
-        Let's build<br />
-        <em>something</em> great.
-      </h2>
+      <h2 className="contact-title" dangerouslySetInnerHTML={{ __html: copy.title }} />
 
       <div className="contact-grid">
         <div className="contact-info">
           <div className="contact-reveal">
-            <p className="mono text-muted mb-3">Write to me</p>
+            <p className="mono text-muted mb-3">{copy.writeToMe}</p>
             <div className="contact-email-row">
               <a href={`mailto:${contactInfo.email}`} className="contact-email" data-cursor="Email">
                 {contactInfo.email}
               </a>
-              <button type="button" onClick={handleCopyEmail} className="pill" aria-label="Copy email address">
+              <button type="button" onClick={handleCopyEmail} className="pill" aria-label={copy.copyAria}>
                 {copied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
-                {copied ? "Copied" : "Copy"}
+                {copied ? copy.copied : copy.copy}
               </button>
             </div>
           </div>
@@ -113,36 +116,47 @@ const Contact = () => {
           </ul>
 
           <dl className="contact-facts contact-reveal">
-            <div><dt className="mono text-muted">Location</dt><dd>{contactInfo.location}</dd></div>
-            <div><dt className="mono text-muted">Work mode</dt><dd>{contactInfo.workMode}</dd></div>
-            <div><dt className="mono text-muted">Languages</dt><dd>{contactInfo.languages}</dd></div>
+            {copy.facts.map((fact) => (
+              <div key={fact.label}><dt className="mono text-muted">{fact.label}</dt><dd>{fact.value}</dd></div>
+            ))}
           </dl>
+
+          {cvUrl && (
+            <a href={cvUrl} download className="pill pill-accent cv-pill contact-reveal">
+              {copy.cv} <span aria-hidden="true">↓</span>
+            </a>
+          )}
         </div>
 
         <form ref={formRef} onSubmit={handleSubmit} className="contact-form">
           <div className="field contact-reveal">
             <input type="text" id="name" name="name" value={form.name} onChange={handleChange} placeholder=" " required />
-            <label htmlFor="name">Your name or company</label>
+            <label htmlFor="name">{copy.name}</label>
           </div>
           <div className="field contact-reveal">
             <input type="email" id="email" name="email" value={form.email} onChange={handleChange} placeholder=" " required />
-            <label htmlFor="email">Email address</label>
+            <label htmlFor="email">{copy.email}</label>
           </div>
           <div className="field contact-reveal">
             <textarea id="message" name="message" value={form.message} onChange={handleChange} placeholder=" " rows="4" required />
-            <label htmlFor="message">Tell me about your project or role</label>
+            <label htmlFor="message">{copy.message}</label>
           </div>
+
+          <p className="consent-note contact-reveal">
+            {copy.consent}{" "}
+            <button type="button" className="text-link" onClick={openPrivacy}>{copy.privacyLink}</button>
+          </p>
 
           <div className="contact-submit contact-reveal">
             <p role="status" aria-live="polite" className="text-sm">
-              {status === "sent" && <span className="text-accent">Message sent. Thanks, I'll get back to you soon.</span>}
+              {status === "sent" && <span className="text-accent">{copy.sent}</span>}
               {status === "error" && (
-                <span className="text-rose-400">The message couldn't be sent. Email me directly at {contactInfo.email}.</span>
+                <span className="text-rose-400">{copy.error(contactInfo.email)}</span>
               )}
             </p>
             <Magnetic strength={0.4}>
               <button type="submit" className="round-button round-button-accent" disabled={status === "sending"}>
-                <span>{status === "sending" ? "Sending…" : "Send"}</span>
+                <span>{status === "sending" ? copy.sending : copy.send}</span>
                 <ArrowUpRightIcon className="size-6" />
               </button>
             </Magnetic>

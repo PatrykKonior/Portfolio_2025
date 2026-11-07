@@ -1,6 +1,9 @@
 import { useRef } from "react";
 import { gsap, useGSAP, motionOK } from "../lib/motion.js";
-import { contactInfo, navLinks } from "../constants";
+import { company, contactInfo } from "../constants";
+import { useLanguage } from "../i18n/index.js";
+import { openPrivacy } from "../lib/privacy.js";
+import { consentEnabled, showCookieSettings } from "../lib/consent.js";
 import useLocalTime from "../hooks/useLocalTime.js";
 
 const socials = [
@@ -12,6 +15,8 @@ const socials = [
 const Footer = () => {
   const footerRef = useRef(null);
   const time = useLocalTime();
+  const { t } = useLanguage();
+  const navLinks = t.nav.links;
 
   useGSAP(() => {
     if (!motionOK()) return;
@@ -27,15 +32,15 @@ const Footer = () => {
     <footer ref={footerRef} className="footer container-x">
       <div className="footer-grid">
         <div>
-          <p className="mono text-muted">Navigation</p>
+          <p className="mono text-muted">{t.footer.navigation}</p>
           <ul>
-            {[...navLinks, { name: "Contact", link: "#contact" }].map(({ name, link }) => (
-              <li key={name}><a href={link} className="footer-link">{name}</a></li>
+            {[...navLinks, { name: t.nav.contact, link: "#contact" }].map(({ name, link }) => (
+              <li key={link}><a href={link} className="footer-link">{name}</a></li>
             ))}
           </ul>
         </div>
         <div>
-          <p className="mono text-muted">Socials</p>
+          <p className="mono text-muted">{t.footer.socials}</p>
           <ul>
             {socials.map((social) => (
               <li key={social.name}>
@@ -52,11 +57,11 @@ const Footer = () => {
           </ul>
         </div>
         <div>
-          <p className="mono text-muted">Local time</p>
+          <p className="mono text-muted">{t.footer.localTime}</p>
           <p className="footer-time">{time} <span className="text-muted">CET</span></p>
         </div>
         <div className="md:text-right">
-          <a href="#top" className="pill">Back to top ↑</a>
+          <a href="#top" className="pill">{t.footer.backToTop}</a>
         </div>
       </div>
 
@@ -65,8 +70,14 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom mono text-muted">
-        <span>© {new Date().getFullYear()} Patryk Konior</span>
-        <span>Built with React, Three.js & GSAP</span>
+        <span>© {new Date().getFullYear()} {company.name}</span>
+        <span>{t.footer.nip} {company.nip}</span>
+        <span className="footer-legal">
+          <button type="button" className="footer-link-button" onClick={openPrivacy}>{t.footer.privacy}</button>
+          {consentEnabled && (
+            <button type="button" className="footer-link-button" onClick={showCookieSettings}>{t.footer.cookies}</button>
+          )}
+        </span>
       </div>
     </footer>
   );

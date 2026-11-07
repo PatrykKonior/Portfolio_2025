@@ -1,25 +1,26 @@
 import { useRef } from "react";
 import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { projects, contactInfo } from "../constants/index.js";
+import { useLanguage } from "../i18n/index.js";
 import ArchitectureDiagram from "../components/ArchitectureDiagram.jsx";
 import SectionHeading from "../components/SectionHeading.jsx";
 
-const ProjectCard = ({ project, index }) => (
+const ProjectCard = ({ project, text, cursor, index }) => (
     <article className="work-card">
         <div className="work-card-info">
             <div className="flex items-center justify-between">
                 <span className="mono text-accent">/0{index + 1}</span>
-                <span className="mono text-muted">{project.year}</span>
+                <span className="mono text-muted">{text.type}</span>
             </div>
-            <h3 className="work-card-title">{project.title}</h3>
-            <p className="text-muted">{project.desc}</p>
+            <h3 className="work-card-title">{text.title}</h3>
+            <p className="text-muted">{text.desc}</p>
             <ul className="chips">
                 {project.tags.map((tag) => <li key={tag} className="chip">{tag}</li>)}
             </ul>
             <div className="work-card-links">
-                {project.links.map((link) => (
-                    <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" className="pill" data-cursor="Code">
-                        {link.label} <span aria-hidden="true">↗</span>
+                {project.links.map((link, linkIndex) => (
+                    <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer" className="pill" data-cursor={cursor}>
+                        {text.links[linkIndex]} <span aria-hidden="true">↗</span>
                     </a>
                 ))}
             </div>
@@ -34,6 +35,7 @@ const ProjectCard = ({ project, index }) => (
 const Work = () => {
     const sectionRef = useRef(null);
     const trackRef = useRef(null);
+    const { t } = useLanguage();
 
     useGSAP(() => {
         if (!motionOK()) return;
@@ -98,19 +100,19 @@ const Work = () => {
                 <div className="container-x">
                     <SectionHeading
                         index="02"
-                        label="Selected work"
-                        title="Selected <em>work</em>"
-                        aside={`${String(projects.length).padStart(2, "0")} projects`}
+                        label={t.work.label}
+                        title={t.work.title}
+                        aside={t.work.count(projects.length)}
                     />
                 </div>
 
                 <div ref={trackRef} className="work-track">
                     {projects.map((project, index) => (
-                        <ProjectCard key={project.title} project={project} index={index} />
+                        <ProjectCard key={project.links[0].url} project={project} text={t.work.projects[index]} cursor={t.work.cursor} index={index} />
                     ))}
                     <a href={contactInfo.github} target="_blank" rel="noopener noreferrer" className="work-more" data-cursor="GitHub">
-                        <span className="mono text-muted">More on GitHub</span>
-                        <span className="work-more-title">See all <em>repos</em> ↗</span>
+                        <span className="mono text-muted">{t.work.more}</span>
+                        <span className="work-more-title" dangerouslySetInnerHTML={{ __html: t.work.moreTitle }} />
                     </a>
                 </div>
 
