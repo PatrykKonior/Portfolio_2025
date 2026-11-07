@@ -80,7 +80,7 @@ const Contact = () => {
       <div className="section-meta">
         <span className="mono">(06)</span>
         <span className="mono">{copy.label}</span>
-        <span className="mono ms-auto availability-inline"><span className="pulse-dot" /> {copy.status}</span>
+        <span className="mono ms-auto availability-inline"><span className="pulse-dot pulse-dot-available" /> {copy.status}</span>
       </div>
 
       <h2 className="contact-title" dangerouslySetInnerHTML={{ __html: copy.title }} />

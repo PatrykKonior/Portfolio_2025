@@ -2,7 +2,7 @@
 const pl = {
     meta: {
         title: "Patryk Konior — Full-stack Developer",
-        description: "Patryk Konior, full-stack developer z Polski (B2B). Aplikacje webowe, API czasu rzeczywistego i wdrożenia w Elixir & Phoenix, Node.js, .NET, React i Svelte.",
+        description: "Patryk Konior, full-stack developer z Polski (B2B). Aplikacje webowe, mobilne i desktopowe, API czasu rzeczywistego i wdrożenia w Elixir & Phoenix, Node.js, .NET, React i Svelte.",
     },
     language: {
         label: "Język",
@@ -24,16 +24,16 @@ const pl = {
     hero: {
         eyebrow: "Full-stack Developer — Portfolio ©2026",
         location: "Chorzów, Polska",
-        title: "Tworzę <em>aplikacje webowe</em> od bazy danych po&nbsp;piksel.",
-        intro: "Cześć, jestem Patryk. Projektuję i wdrażam oprogramowanie produkcyjne w React, Svelte, Elixir, Node.js i .NET, a do tego rozmawiam bezpośrednio z ludźmi, którzy z niego korzystają.",
-        availability: "Przyjmuję nowe projekty",
+        title: "Tworzę <em>aplikacje</em> od bazy danych po&nbsp;piksel.",
+        intro: "Cześć, jestem Patryk. Projektuję i tworzę aplikacje webowe, mobilne i desktopowe w React, Svelte, Elixir, Node.js i .NET, od pierwszej rozmowy aż po wdrożenie.",
+        availability: "Dostępny na nowe projekty",
         cta: "Zobacz projekty",
         cv: "Pobierz CV",
         scroll: "Przewiń",
     },
     about: {
         label: "O mnie",
-        text: "Prowadzę funkcjonalności od schematu bazy danych i API czasu rzeczywistego aż po dopracowany interfejs, a potem wdrażam je z Dockerem i CI/CD. Trzy lata komercyjnej pracy z Elixirem, Node.js i .NET nauczyły mnie, że świetne oprogramowanie to w równym stopniu czysty kod i jasna komunikacja z klientem.",
+        text: "Prowadzę funkcjonalności od schematu bazy danych i API czasu rzeczywistego aż po dopracowany interfejs, a potem wdrażam je z Dockerem i CI/CD. Komercyjne projekty w Node.js, Elixirze i .NET, z Reactem i Svelte na froncie, nauczyły mnie, że świetne oprogramowanie to w równym stopniu czysty kod i jasna komunikacja z klientem.",
         stats: [
             { label: "Lata doświadczenia", detail: "Projekty komercyjne" },
             { label: "Ekosystemy backendowe", detail: "Elixir · Node.js · .NET" },
@@ -160,7 +160,7 @@ const pl = {
     },
     contact: {
         label: "Kontakt",
-        status: "Otwarty na projekty i oferty",
+        status: "Dostępny na projekty i oferty pracy",
         title: "Zbudujmy<br /><em>coś</em> świetnego.",
         writeToMe: "Napisz do mnie",
         copy: "Kopiuj",

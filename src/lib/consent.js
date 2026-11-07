@@ -6,8 +6,10 @@ import { dictionaries } from "../i18n/index.js";
 import { gsap, motionOK } from "./motion.js";
 
 // The banner only exists once a Google Analytics ID is configured: without analytics the site
-// sets no tracking cookies, so there is nothing to ask consent for.
-export const consentEnabled = Boolean(site.gaMeasurementId);
+// sets no tracking cookies, so there is nothing to ask consent for. In development,
+// ?cookies previews the banner without an ID (nothing is loaded either way).
+const preview = import.meta.env.DEV && new URLSearchParams(window.location.search).has("cookies");
+export const consentEnabled = Boolean(site.gaMeasurementId) || preview;
 
 let gaLoaded = false;
 let started = false;
@@ -20,6 +22,7 @@ const gtag = (...args) => {
 // Google Consent Mode v2: everything starts denied; GA is only fetched after analytics is accepted.
 const syncAnalytics = () => {
     const granted = CookieConsent.acceptedCategory("analytics");
+    if (!site.gaMeasurementId) return;
     if (granted && !gaLoaded) {
         gaLoaded = true;
         gtag("consent", "default", {

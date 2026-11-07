@@ -2,7 +2,7 @@
 const en = {
     meta: {
         title: "Patryk Konior — Full-stack Developer",
-        description: "Patryk Konior, full-stack developer from Poland (B2B). Web apps, real-time APIs and deployments with Elixir & Phoenix, Node.js, .NET, React and Svelte.",
+        description: "Patryk Konior, full-stack developer from Poland (B2B). Web, mobile and desktop apps, real-time APIs and deployments with Elixir & Phoenix, Node.js, .NET, React and Svelte.",
     },
     language: {
         label: "Language",
@@ -24,8 +24,8 @@ const en = {
     hero: {
         eyebrow: "Full-stack Developer — Portfolio ©2026",
         location: "Based in Chorzów, Poland",
-        title: "Building <em>web apps</em> from database to&nbsp;pixel.",
-        intro: "Hi, I'm Patryk. I design and ship production software with React, Svelte, Elixir, Node.js and .NET, and I talk directly with the people who use it.",
+        title: "Building <em>apps</em> from database to&nbsp;pixel.",
+        intro: "Hi, I'm Patryk. I design and build web, mobile and desktop apps with React, Svelte, Elixir, Node.js and .NET, from the first conversation all the way to launch.",
         availability: "Available for new projects",
         cta: "See work",
         cv: "Download CV",
@@ -33,7 +33,7 @@ const en = {
     },
     about: {
         label: "About",
-        text: "I take features all the way from database schema and real-time APIs to a polished interface, then ship them with Docker and CI/CD. Three years of commercial work across Elixir, Node.js and .NET taught me that great software is equal parts clean code and clear conversations with clients.",
+        text: "I take features all the way from database schema and real-time APIs to a polished interface, then ship them with Docker and CI/CD. Commercial projects in Node.js, Elixir and .NET, with React and Svelte on the front end, taught me that great software is equal parts clean code and clear conversations with clients.",
         stats: [
             { label: "Years of experience", detail: "Commercial projects" },
             { label: "Backend ecosystems", detail: "Elixir · Node.js · .NET" },
@@ -155,7 +155,7 @@ const en = {
     },
     contact: {
         label: "Contact",
-        status: "Open to projects & roles",
+        status: "Available for projects & roles",
         title: "Let's build<br /><em>something</em> great.",
         writeToMe: "Write to me",
         copy: "Copy",

@@ -97,6 +97,7 @@ void main() {
 export const blobFragment = /* glsl */ `
 uniform float uTime;
 uniform float uAccent;
+uniform float uFlood;
 uniform vec3 uAccentColor;
 
 varying vec3 vNormal;
@@ -124,6 +125,8 @@ void main() {
 
     vec3 color = mix(core, iridescent, clamp(fresnel * 1.1 + diffuse * 0.18, 0.0, 1.0));
     color = mix(color, uAccentColor, smoothstep(0.55, 1.0, fresnel) * uAccent * 0.85);
+    // While the blob fills the screen, let the iridescence wash over the whole surface.
+    color = mix(color, iridescent * (0.55 + 0.45 * diffuse), uFlood * 0.75);
     color += specular * 0.55;
 
     gl_FragColor = vec4(color, 1.0);

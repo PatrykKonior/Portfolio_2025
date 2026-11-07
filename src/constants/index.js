@@ -20,7 +20,7 @@ const cvFiles = {
 const counterItems = [
   { value: 3, suffix: "+" },
   { value: 3, suffix: "" },
-  { value: 3, suffix: "" },
+  { value: 3, suffix: "+" },
   { value: 45, suffix: "+" },
 ];
 

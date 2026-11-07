@@ -18,7 +18,7 @@ const Preloader = ({ onComplete }) => {
 
         const counter = { value: 0 };
         gsap.timeline()
-            .from(".preloader-word > span", { yPercent: 110, duration: 1, stagger: 0.035 })
+            .from(".preloader-word > span", { yPercent: 140, duration: 1, stagger: 0.035 })
             .to(counter, {
                 value: 100,
                 duration: 2,
@@ -28,7 +28,7 @@ const Preloader = ({ onComplete }) => {
                 },
             }, 0)
             .to(".preloader-bar", { scaleX: 1, duration: 2, ease: "power3.inOut" }, 0)
-            .to(".preloader-word > span", { yPercent: -110, duration: 0.6, ease: "expo.in", stagger: 0.02 })
+            .to(".preloader-word > span", { yPercent: -140, duration: 0.6, ease: "expo.in", stagger: 0.02 })
             .to(".preloader-meta", { opacity: 0, duration: 0.3 }, "<")
             .add(onComplete)
             .to(rootRef.current, { clipPath: "inset(0% 0% 100% 0%)", duration: 1.2, ease: "expo.inOut" })

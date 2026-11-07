@@ -96,6 +96,11 @@ img {
     flex: none;
 }
 
+/* Availability signal. */
+.pulse-dot-available {
+    background: #22c55e;
+}
+
 .pulse-dot::after {
     content: "";
     position: absolute;
@@ -249,7 +254,7 @@ a:hover .roll::after {
     margin-bottom: -0.14em;
 }
 
-/* ---------- Language switch & curtain ---------- */
+/* ---------- Language switch & takeover ---------- */
 
 .lang-switch {
     position: relative;
@@ -293,41 +298,37 @@ a:hover .roll::after {
     color: var(--bg);
 }
 
-.lang-curtain {
+.takeover {
     position: fixed;
     inset: 0;
     z-index: 97;
     display: none;
     flex-direction: column;
-    justify-content: space-between;
-    padding: var(--gutter);
-    padding-top: 6rem;
-    background: var(--accent);
-    color: var(--on-accent);
-    clip-path: inset(100% 0% 0% 0%);
-}
-
-.curtain-code {
-    display: flex;
-    flex: 1;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    font-size: clamp(9rem, 38vw, 34rem);
-    font-weight: 600;
-    letter-spacing: -0.07em;
-    line-height: 0.85;
+    gap: 1.5rem;
+    pointer-events: none;
+    color: #fff;
 }
 
-.curtain-char {
-    display: inline-block;
-    padding-bottom: 0.05em;
-}
-
-.curtain-meta {
+.takeover-word {
     display: flex;
-    justify-content: space-between;
-    color: rgba(255, 255, 255, 0.75);
+    overflow: hidden;
+    padding: 0.05em 0.1em 0.18em;
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(5rem, 19vw, 18rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    text-shadow: 0 10px 60px rgba(10, 10, 11, 0.45);
+}
+
+.takeover-char {
+    display: inline-block;
+}
+
+.takeover-meta {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 /* ---------- CV, consent note, footer legal ---------- */
@@ -655,6 +656,8 @@ a:hover .roll::after {
 .preloader-word {
     display: flex;
     overflow: hidden;
+    /* Room inside the mask for descenders (the y in Patryk). */
+    padding-bottom: 0.18em;
     font-size: clamp(3rem, 12vw, 12rem);
     font-weight: 600;
     letter-spacing: -0.05em;

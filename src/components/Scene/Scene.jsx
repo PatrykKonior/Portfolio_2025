@@ -9,7 +9,11 @@ import { gsap, useGSAP, motionOK } from "../../lib/motion.js";
 import { useLanguage } from "../../i18n/index.js";
 import StaticBlob from "./StaticBlob.jsx";
 
-const { damp } = THREE.MathUtils;
+const { damp, lerp } = THREE.MathUtils;
+
+// Mesh radius while the blob covers the screen: big enough to fill any aspect ratio, small
+// enough (with the flattened surface) that the camera at z = 6 never ends up inside it.
+const TAKEOVER_RADIUS = 4.8;
 
 const Blob = ({ detail, still }) => {
     const mesh = useRef(null);
@@ -20,26 +24,32 @@ const Blob = ({ detail, still }) => {
         uDistort: { value: 0.3 },
         uFrequency: { value: 1.05 },
         uAccent: { value: 0 },
+        uFlood: { value: 0 },
         uAccentColor: { value: new THREE.Color("#4d7cff") },
     }), []);
 
     useFrame((_, rawDelta) => {
         const delta = Math.min(rawDelta, 0.05);
-        const { blob, pointer, velocity, intro } = sceneState;
-        const speed = Math.min(Math.abs(velocity) * 0.02, 1.4);
+        const { blob, pointer, velocity, intro, takeover } = sceneState;
+        const speed = Math.min(Math.abs(velocity) * 0.02, 1.4) * (1 - takeover);
+        // During a takeover the blob follows the tween tightly instead of easing behind it.
+        const follow = takeover > 0.001 ? 14 : 1;
 
         // With reduced motion the blob keeps its shape and only follows the scroll.
-        if (!still) uniforms.uTime.value += delta * (0.4 + speed);
-        uniforms.uDistort.value = damp(uniforms.uDistort.value, blob.distort + speed * 0.18, 4, delta);
-        uniforms.uAccent.value = damp(uniforms.uAccent.value, blob.accent, 3, delta);
+        if (!still) uniforms.uTime.value += delta * (0.4 + speed + takeover * 1.2);
+        uniforms.uDistort.value = damp(uniforms.uDistort.value, lerp(blob.distort + speed * 0.18, 0.08, takeover), 4 * follow, delta);
+        uniforms.uAccent.value = damp(uniforms.uAccent.value, lerp(blob.accent, 1, takeover), 3, delta);
+        uniforms.uFlood.value = takeover;
 
         const target = mesh.current;
-        target.position.x = damp(target.position.x, blob.x * viewport.width * 0.5 + pointer.x * 0.25, 2.5, delta);
-        target.position.y = damp(target.position.y, blob.y * viewport.height * 0.5 + pointer.y * 0.2, 2.5, delta);
+        const x = blob.x * viewport.width * 0.5 + pointer.x * 0.25;
+        const y = blob.y * viewport.height * 0.5 + pointer.y * 0.2;
+        target.position.x = damp(target.position.x, lerp(x, 0, takeover), 2.5 * follow, delta);
+        target.position.y = damp(target.position.y, lerp(y, 0, takeover), 2.5 * follow, delta);
 
         const fit = Math.min(viewport.width, viewport.height) * 0.26;
-        const scale = blob.scale * fit * (0.2 + 0.8 * intro);
-        target.scale.setScalar(damp(target.scale.x, scale, 3, delta));
+        const scale = lerp(blob.scale * fit * (0.2 + 0.8 * intro), TAKEOVER_RADIUS, takeover);
+        target.scale.setScalar(damp(target.scale.x, scale, 3 * follow, delta));
 
         if (!still) target.rotation.y += delta * 0.12;
         target.rotation.x = damp(target.rotation.x, -pointer.y * 0.5, 2, delta);

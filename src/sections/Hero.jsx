@@ -56,7 +56,7 @@ const Hero = ({ ready }) => {
 
                     <div className="hero-status hero-reveal">
                         <div className="availability">
-                            <span className="pulse-dot" />
+                            <span className="pulse-dot pulse-dot-available" />
                             {heroCopy.availability}
                         </div>
                         {cvUrl && (

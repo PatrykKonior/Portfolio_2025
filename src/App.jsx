@@ -4,7 +4,7 @@ import { flushSync } from "react-dom";
 import Preloader from "./components/Preloader.jsx";
 import Cursor from "./components/Cursor.jsx";
 import NavBar from "./components/NavBar.jsx";
-import LanguageCurtain from "./components/LanguageCurtain.jsx";
+import LanguageTakeover from "./components/LanguageTakeover.jsx";
 import PrivacyDialog from "./components/PrivacyDialog.jsx";
 import Hero from "./sections/Hero.jsx";
 import About from "./sections/About.jsx";
@@ -25,7 +25,7 @@ const Scene = lazy(() => import("./components/Scene/Scene.jsx"));
 const App = () => {
     const [ready, setReady] = useState(false);
     const [lang, setLang] = useState(initialLanguage);
-    const curtainRef = useRef(null);
+    const takeoverRef = useRef(null);
     useSmoothScroll(ready);
 
     useEffect(() => {
@@ -39,8 +39,9 @@ const App = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ready]);
 
-    // Swaps the language under the curtain: the sections remount in the new language (so every
-    // SplitText and ScrollTrigger is rebuilt), then the reader is put back where they were.
+    // Swaps the language while the blob covers the screen: the sections remount in the new
+    // language (so every SplitText and ScrollTrigger is rebuilt), then the reader is put back
+    // where they were.
     const switchLanguage = useCallback((next) => {
         if (next === lang) return;
         const swap = () => {
@@ -50,7 +51,7 @@ const App = () => {
             jumpTo(y);
             ScrollTrigger.update();
         };
-        if (motionOK() && curtainRef.current) curtainRef.current.play(next, swap);
+        if (motionOK() && takeoverRef.current) takeoverRef.current.play(next, swap);
         else swap();
     }, [lang]);
 
@@ -77,7 +78,7 @@ const App = () => {
             <Suspense fallback={null}>
                 <Scene />
             </Suspense>
-            <LanguageCurtain ref={curtainRef} />
+            <LanguageTakeover ref={takeoverRef} />
             <PrivacyDialog />
         </LanguageContext.Provider>
     );
