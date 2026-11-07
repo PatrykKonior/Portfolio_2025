@@ -7,10 +7,10 @@ import { sceneState } from "./sceneState.js";
 
 let lenis = null;
 
-export const scrollToTarget = (target) => {
+export const scrollToTarget = (target, { offset = 0, duration = 1.6 } = {}) => {
     const element = typeof target === "string" ? document.querySelector(target) : target;
     if (!element) return;
-    if (lenis) lenis.scrollTo(element, { duration: 1.6 });
+    if (lenis) lenis.scrollTo(element, { duration, offset });
     else element.scrollIntoView({ behavior: motionOK() ? "smooth" : "auto" });
 };
 

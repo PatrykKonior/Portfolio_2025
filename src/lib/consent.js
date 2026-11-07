@@ -6,10 +6,10 @@ import { dictionaries } from "../i18n/index.js";
 import { gsap, motionOK } from "./motion.js";
 
 // The banner only exists once a Google Analytics ID is configured: without analytics the site
-// sets no tracking cookies, so there is nothing to ask consent for. In development,
-// ?cookies previews the banner without an ID (nothing is loaded either way).
-const preview = import.meta.env.DEV && new URLSearchParams(window.location.search).has("cookies");
-export const consentEnabled = Boolean(site.gaMeasurementId) || preview;
+// sets no tracking cookies, so there is nothing to ask consent for. site.config.js can turn on
+// a preview of it (and in development, ?cookies does); without an ID nothing is loaded either way.
+const preview = site.preview?.cookieBanner || (import.meta.env.DEV && new URLSearchParams(window.location.search).has("cookies"));
+export const consentEnabled = Boolean(site.gaMeasurementId) || Boolean(preview);
 
 let gaLoaded = false;
 let started = false;

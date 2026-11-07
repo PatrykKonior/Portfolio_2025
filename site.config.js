@@ -8,4 +8,11 @@ export default {
     // Google Analytics 4 measurement ID, e.g. "G-XXXXXXXXXX". While empty, no analytics
     // and no cookie banner (the site sets no tracking cookies, so none is needed).
     gaMeasurementId: "",
+
+    // Shows the cookie banner and the Download CV buttons before there is a GA ID or a CV file,
+    // to review the full page. Set both to false before going live.
+    preview: {
+        cookieBanner: true,
+        cvButtons: true,
+    },
 };

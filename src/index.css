@@ -586,7 +586,8 @@ a:hover .roll::after {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 100;
+    /* Above everything, dialogs and the cookie banner included. */
+    z-index: 2147483647;
     pointer-events: none;
     border-radius: 999px;
     opacity: 0;

@@ -2,25 +2,47 @@ import { useRef, useState } from "react";
 import { gsap, useGSAP, motionOK } from "../lib/motion.js";
 import { expCards } from "../constants/index.js";
 import { useLanguage } from "../i18n/index.js";
+import { scrollToTarget } from "../lib/smoothScroll.js";
 import SectionHeading from "../components/SectionHeading.jsx";
+
+// Room left above a row when the page scrolls to it, so the navbar doesn't cover the title.
+const SCROLL_MARGIN = 110;
+
+// Once a row has opened, scroll just enough to show all of it: down if its details run past
+// the bottom of the screen, up if its title is hidden under the navbar.
+const revealRow = (row) => {
+    const rect = row.getBoundingClientRect();
+    const overflowsBottom = rect.bottom > window.innerHeight - 24;
+    const hiddenTop = rect.top < SCROLL_MARGIN;
+    if (!overflowsBottom && !hiddenTop) return;
+    const fitsOnScreen = rect.height <= window.innerHeight - SCROLL_MARGIN - 24;
+    const offset = hiddenTop || !fitsOnScreen ? -SCROLL_MARGIN : rect.height - window.innerHeight + 24;
+    scrollToTarget(row, { offset, duration: 1.1 });
+};
 
 const ExperienceRow = ({ job, open, onToggle, id }) => {
     const panelRef = useRef(null);
+    const rowRef = useRef(null);
+    const mounted = useRef(false);
 
     useGSAP(() => {
         const panel = panelRef.current;
+        // The first row starts open on load; only rows opened by a click bring themselves into view.
+        const reveal = open && mounted.current ? () => revealRow(rowRef.current) : undefined;
+        mounted.current = true;
         if (!motionOK()) {
             gsap.set(panel, { height: open ? "auto" : 0 });
+            reveal?.();
             return;
         }
-        gsap.to(panel, { height: open ? "auto" : 0, duration: 0.9, ease: "expo.inOut" });
+        gsap.to(panel, { height: open ? "auto" : 0, duration: 0.9, ease: "expo.inOut", onComplete: reveal });
         if (open) {
             gsap.fromTo(panel.querySelectorAll("li"), { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, stagger: 0.025, delay: 0.25 });
         }
     }, { dependencies: [open] });
 
     return (
-        <li className={`exp-row ${open ? "open" : ""}`}>
+        <li ref={rowRef} className={`exp-row ${open ? "open" : ""}`}>
             <button
                 type="button"
                 className="exp-row-head"
