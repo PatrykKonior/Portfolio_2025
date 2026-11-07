@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
 import { useLanguage } from "../i18n/index.js";
 import useCvUrl from "../hooks/useCvUrl.js";
+import CvButton from "../components/CvButton.jsx";
 import Magnetic from "../components/Magnetic.jsx";
 
 const Hero = ({ ready }) => {
@@ -59,11 +60,7 @@ const Hero = ({ ready }) => {
                             <span className="pulse-dot pulse-dot-available" />
                             {heroCopy.availability}
                         </div>
-                        {cvUrl && (
-                            <a href={cvUrl} download className="pill cv-pill">
-                                {heroCopy.cv} <span aria-hidden="true">↓</span>
-                            </a>
-                        )}
+                        {cvUrl && <CvButton href={cvUrl} label={heroCopy.cv} />}
                     </div>
 
                     <Magnetic className="hero-reveal" strength={0.45}>

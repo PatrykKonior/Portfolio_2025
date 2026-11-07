@@ -5,6 +5,7 @@ import { gsap, SplitText, useGSAP, motionOK } from "../lib/motion.js";
 import { contactInfo } from "../constants";
 import { useLanguage } from "../i18n/index.js";
 import useCvUrl from "../hooks/useCvUrl.js";
+import CvButton from "../components/CvButton.jsx";
 import { openPrivacy } from "../lib/privacy.js";
 import Magnetic from "../components/Magnetic.jsx";
 import { ArrowUpRightIcon, CheckIcon, CopyIcon } from "../components/Icons";
@@ -122,9 +123,9 @@ const Contact = () => {
           </dl>
 
           {cvUrl && (
-            <a href={cvUrl} download className="pill pill-accent cv-pill contact-reveal">
-              {copy.cv} <span aria-hidden="true">↓</span>
-            </a>
+            <div className="contact-reveal">
+              <CvButton href={cvUrl} label={copy.cv} className="cv-button-accent" />
+            </div>
           )}
         </div>
 

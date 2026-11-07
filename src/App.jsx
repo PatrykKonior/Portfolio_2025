@@ -6,6 +6,7 @@ import Cursor from "./components/Cursor.jsx";
 import NavBar from "./components/NavBar.jsx";
 import LanguageTakeover from "./components/LanguageTakeover.jsx";
 import PrivacyDialog from "./components/PrivacyDialog.jsx";
+import CookieConsent from "./components/CookieConsent.jsx";
 import Hero from "./sections/Hero.jsx";
 import About from "./sections/About.jsx";
 import Work from "./sections/Work.jsx";
@@ -16,7 +17,6 @@ import Contact from "./sections/Contact.jsx";
 import Footer from "./sections/Footer.jsx";
 import { jumpTo, useSmoothScroll } from "./lib/smoothScroll.js";
 import { motionOK, ScrollTrigger } from "./lib/motion.js";
-import { setConsentLanguage, startConsent } from "./lib/consent.js";
 import { applyLanguage, dictionaries, initialLanguage, LanguageContext } from "./i18n/index.js";
 
 // three.js and post-processing ship in their own chunk so the page paints first.
@@ -30,14 +30,7 @@ const App = () => {
 
     useEffect(() => {
         applyLanguage(lang);
-        setConsentLanguage(lang);
     }, [lang]);
-
-    useEffect(() => {
-        if (ready) startConsent(lang);
-        // Started once; later language changes go through setConsentLanguage.
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ready]);
 
     // Swaps the language while the blob covers the screen: the sections remount in the new
     // language (so every SplitText and ScrollTrigger is rebuilt), then the reader is put back
@@ -80,6 +73,7 @@ const App = () => {
             </Suspense>
             <LanguageTakeover ref={takeoverRef} />
             <PrivacyDialog />
+            <CookieConsent ready={ready} />
         </LanguageContext.Provider>
     );
 };
