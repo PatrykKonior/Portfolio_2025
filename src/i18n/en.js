@@ -58,19 +58,19 @@ const en = {
             {
                 title: "Design Office Management Suite",
                 type: "Desktop · Web · Mobile",
-                desc: "A system for running a design office: clients, projects, invoices, payments, tasks and time tracking. One .NET Core REST API serves three apps: a web app and a mobile app built from a single React Native (Expo) codebase, and a WPF desktop app built with MVVM.",
+                desc: "One system that runs an entire design office: clients, projects, invoices, payments, tasks and time tracking in a single place. The team works wherever it suits them, in a WPF desktop app, in the browser or on the phone, and every app stays in sync through one .NET Core REST API. The web and mobile apps share a single codebase, so new features reach every platform at once.",
                 links: ["API", "Web & Mobile", "Desktop"],
             },
             {
-                title: "Pizza Restaurant Admin Dashboard",
-                type: "Web dashboard",
-                desc: "A React dashboard for managing the menu, orders, inventory, staff schedules and documents, backed by a .NET REST API.",
-                links: ["Frontend", "API"],
+                title: "Pizzeria Management Panel & Storefront",
+                type: "Admin panel · Storefront",
+                desc: "A complete digital back office for a multi-location pizzeria, paired with a modern storefront for its customers. The React admin panel brings sales, stock, staff schedules, documents, recipes and per-location revenue reports into one clear dashboard, all powered by a .NET REST API on SQL Server.",
+                links: ["Admin panel", "API"],
             },
             {
-                title: "Pento: Phoenix LiveView Store",
+                title: "Pento: Real-time Store on Phoenix LiveView",
                 type: "Real-time store",
-                desc: "An online store built with Phoenix LiveView. Users sign up, browse and search products by SKU, rate them and fill in a demographic survey. The admin dashboard turns ratings into interactive charts filtered by age group and gender, all without page reloads.",
+                desc: "A real-time online store built with Phoenix LiveView. Customers find products fast, rate them and share their feedback, while the owner gets an analytics dashboard that turns that data into interactive charts by customer segment. Everything updates live, with no page reloads and no separate JavaScript front end to maintain.",
                 links: ["Code"],
             },
         ],
@@ -92,8 +92,8 @@ const en = {
             },
             {
                 title: "Backend & Real-time APIs",
-                desc: "REST APIs and live features over WebSockets, built with Elixir, Node.js or .NET on top of PostgreSQL, SQL Server or MongoDB.",
-                points: ["REST & WebSockets", "Auth with JWT / OAuth", "SQL & NoSQL data models"],
+                desc: "REST APIs, microservices and live features over WebSockets, built with Elixir, Node.js or .NET on top of PostgreSQL, SQL Server or MongoDB, plus automation scripts in Python.",
+                points: ["REST & WebSockets", "Auth with JWT / OAuth", "SQL & NoSQL data models", "Python automation"],
             },
             {
                 title: "Deployment & DevOps",
@@ -129,8 +129,10 @@ const en = {
                 title: "Junior Fullstack Developer",
                 period: "2025",
                 date: "March 2025 – December 2025 · Hybrid",
-                summary: "Promoted after a year on the frontend to take ownership of features across the whole stack.",
+                summary: "Promoted after a year on the frontend to own features across the whole stack and lead three projects.",
                 responsibilities: [
+                    "Leading three projects end to end: running their development, delivering fixes and improvements, and agreeing changes directly with the client.",
+                    "Building and maintaining microservices in Node.js and Express.",
                     "Building REST APIs secured with JWT and OAuth, backed by Microsoft SQL Server and MongoDB.",
                     "Writing automation and integration scripts in T-SQL, Python and PowerShell.",
                     "Refactoring and optimizing existing code and application logic.",
@@ -215,9 +217,14 @@ const en = {
             },
             {
                 heading: "Cookies and storage",
-                body: "The site doesn't use cookies for tracking unless you agree to analytics in the cookie settings. It stores your language choice in your browser so the site remembers it. Fonts and all other assets are served from this site, not from third parties.",
+                body: "The site doesn't use any cookies. It only stores your language choice in your browser so the site remembers it. Fonts and all other assets are served from this site, not from third parties.",
             },
         ],
+        // Replaces the last section once Google Analytics is switched on in site.config.js.
+        analyticsCookies: {
+            heading: "Cookies and analytics",
+            body: "Your browser stores your language and your cookie choice; these are needed for the site to work. Only if you accept analytics in the cookie banner does Google Analytics 4 (provided by Google Ireland Ltd.) set its cookies (_ga, _ga_*), for up to two years, to measure visits; this data may also be processed by Google outside the EEA. The legal basis is your consent (Art. 6(1)(a) GDPR), which you can change or withdraw at any time under \u201cCookie settings\u201d in the footer. Fonts and all other assets are served from this site.",
+        },
     },
     cookies: {
         label: "Cookies",

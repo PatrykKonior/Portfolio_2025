@@ -31,6 +31,7 @@ const logoIconsList = [
   { name: "TypeScript", imgPath: "/images/tech/typescript.svg" },
   { name: "Svelte", imgPath: "/images/tech/svelte.svg" },
   { name: "Node.js", imgPath: "/images/tech/nodejs.svg" },
+  { name: "Python", imgPath: "/images/tech/python.svg" },
   { name: "C#", imgPath: "/images/tech/csharp.svg" },
   { name: ".NET", imgPath: "/images/tech/dotnet.svg" },
   { name: "PostgreSQL", imgPath: "/images/tech/postgresql.svg" },
@@ -45,7 +46,7 @@ const projects = [
     tags: ["C#", ".NET Core", "Entity Framework", "WPF / MVVM", "React Native", "Expo", "TypeScript", "SQL Server"],
     architecture: {
       clients: [
-        { name: "Web app", detail: "React Native Web", icon: "/images/tech/react.svg" },
+        { name: "Web app", detail: "React", icon: "/images/tech/react.svg" },
         { name: "Mobile app", detail: "React Native", icon: "/images/tech/react.svg" },
         { name: "Desktop app", detail: "WPF / MVVM", icon: "/images/tech/csharp.svg" },
       ],
@@ -61,7 +62,10 @@ const projects = [
   {
     tags: ["React", "React Router", "Bootstrap", "C#", ".NET Core", "SQL Server"],
     architecture: {
-      clients: [{ name: "Web app", detail: "React", icon: "/images/tech/react.svg" }],
+      clients: [
+        { name: "Admin panel", detail: "React", icon: "/images/tech/react.svg" },
+        { name: "Storefront", detail: "React", icon: "/images/tech/react.svg" },
+      ],
       server: { name: ".NET Core", detail: "REST API", icon: "/images/tech/dotnet.svg" },
       database: { name: "SQL Server", detail: "Entity Framework", icon: "/images/tech/microsoftsqlserver.svg" },
     },
@@ -99,7 +103,7 @@ const expCards = [
   {
     company: "Medas sp. z o.o.",
     period: "2025",
-    stack: ["Node.js", "Express.js", "TypeScript", "REST API", "JWT / OAuth", "SQL Server", "T-SQL", "MongoDB", "Python", "PowerShell", "Windows Server", "Jest", "React Testing Library"],
+    stack: ["Node.js", "Express.js", "Microservices", "TypeScript", "REST API", "JWT / OAuth", "SQL Server", "T-SQL", "MongoDB", "Python", "PowerShell", "Windows Server", "Linux", "Nginx", "GitHub", "Jest", "React Testing Library"],
   },
   {
     company: "Medas sp. z o.o.",

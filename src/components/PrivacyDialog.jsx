@@ -5,6 +5,13 @@ import { lockScroll } from "../lib/smoothScroll.js";
 import { fill, useLanguage } from "../i18n/index.js";
 import { company, contactInfo } from "../constants/index.js";
 import { CloseIcon } from "./Icons.jsx";
+import { consentEnabled } from "../lib/consent.js";
+
+// With analytics on, the last section (cookies) describes Google Analytics instead.
+const sections = (t) => {
+    const list = t.privacy.sections;
+    return consentEnabled ? [...list.slice(0, -1), t.privacy.analyticsCookies] : list;
+};
 
 const Panel = ({ onClose }) => {
     const ref = useRef(null);
@@ -41,7 +48,7 @@ const Panel = ({ onClose }) => {
                     </button>
                 </div>
                 <h2 id="privacy-title" className="privacy-title privacy-reveal">{t.privacy.title}</h2>
-                {t.privacy.sections.map((section, index) => (
+                {sections(t).map((section, index) => (
                     <section key={section.heading} className="privacy-section privacy-reveal">
                         <span className="mono text-accent">0{index + 1}</span>
                         <div>

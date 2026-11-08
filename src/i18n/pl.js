@@ -58,19 +58,19 @@ const pl = {
             {
                 title: "System do zarządzania biurem projektowym",
                 type: "Desktop · Web · Mobile",
-                desc: "System do prowadzenia biura projektowego: klienci, projekty, faktury, płatności, zadania i ewidencja czasu pracy. Jedno REST API w .NET Core obsługuje trzy aplikacje: webową i mobilną z jednej bazy kodu React Native (Expo) oraz desktopową w WPF zbudowaną w architekturze MVVM.",
+                desc: "Jeden system, który prowadzi całe biuro projektowe: klienci, projekty, faktury, płatności, zadania i ewidencja czasu pracy w jednym miejscu. Zespół pracuje tam, gdzie mu wygodnie: w aplikacji desktopowej (WPF), w przeglądarce lub na telefonie, a wszystkie aplikacje są zsynchronizowane przez jedno REST API w .NET Core. Wersja webowa i mobilna mają wspólną bazę kodu, więc nowe funkcje trafiają od razu na każdą platformę.",
                 links: ["API", "Web i mobile", "Desktop"],
             },
             {
-                title: "Panel administracyjny pizzerii",
-                type: "Panel webowy",
-                desc: "Panel w React do zarządzania menu, zamówieniami, magazynem, grafikami pracowników i dokumentami, oparty na REST API w .NET.",
-                links: ["Frontend", "API"],
+                title: "Panel zarządzania pizzerią i strona sprzedażowa",
+                type: "Panel admina · Sklep",
+                desc: "Kompletne cyfrowe zaplecze dla pizzerii z kilkoma lokalami, połączone z nowoczesną stroną sprzedażową dla klientów. Panel administracyjny w React zbiera w jednym czytelnym miejscu sprzedaż, magazyn, grafiki pracowników, dokumenty i receptury oraz raporty przychodów dla każdego lokalu, a całość napędza REST API w .NET z SQL Server.",
+                links: ["Panel admina", "API"],
             },
             {
-                title: "Pento: sklep w Phoenix LiveView",
+                title: "Pento: sklep w czasie rzeczywistym w Phoenix LiveView",
                 type: "Sklep w czasie rzeczywistym",
-                desc: "Sklep internetowy zbudowany w Phoenix LiveView. Użytkownicy zakładają konto, przeglądają i wyszukują produkty po SKU, oceniają je i wypełniają ankietę demograficzną. Panel administratora zamienia oceny w interaktywne wykresy filtrowane po grupie wiekowej i płci, a wszystko działa bez przeładowania strony.",
+                desc: "Sklep internetowy działający w czasie rzeczywistym, zbudowany w Phoenix LiveView. Klienci szybko znajdują produkty, oceniają je i dzielą się opinią, a właściciel dostaje panel analityczny, który zamienia te dane w interaktywne wykresy według grup klientów. Wszystko aktualizuje się na żywo, bez przeładowania strony i bez osobnego frontendu w JavaScripcie do utrzymania.",
                 links: ["Kod"],
             },
         ],
@@ -83,6 +83,8 @@ const pl = {
             "Web app": "Aplikacja web",
             "Mobile app": "Aplikacja mobilna",
             "Desktop app": "Aplikacja desktop",
+            "Admin panel": "Panel admina",
+            "Storefront": "Strona sprzedażowa",
             "Real-time UI": "UI na żywo",
         },
     },
@@ -97,8 +99,8 @@ const pl = {
             },
             {
                 title: "Backend i API czasu rzeczywistego",
-                desc: "REST API i funkcje działające na żywo przez WebSockety, w Elixirze, Node.js lub .NET, na PostgreSQL, SQL Server lub MongoDB.",
-                points: ["REST i WebSockety", "Autoryzacja JWT / OAuth", "Modele danych SQL i NoSQL"],
+                desc: "REST API, mikroserwisy i funkcje działające na żywo przez WebSockety, w Elixirze, Node.js lub .NET, na PostgreSQL, SQL Server lub MongoDB, a do tego skrypty automatyzujące w Pythonie.",
+                points: ["REST i WebSockety", "Autoryzacja JWT / OAuth", "Modele danych SQL i NoSQL", "Automatyzacje w Pythonie"],
             },
             {
                 title: "Wdrożenia i DevOps",
@@ -134,8 +136,10 @@ const pl = {
                 title: "Junior Fullstack Developer",
                 period: "2025",
                 date: "Marzec 2025 – grudzień 2025 · Hybrydowo",
-                summary: "Awans po roku na frontendzie i odpowiedzialność za funkcjonalności w całym stacku.",
+                summary: "Awans po roku na frontendzie: odpowiedzialność za funkcjonalności w całym stacku i prowadzenie trzech projektów.",
                 responsibilities: [
+                    "Prowadzenie trzech projektów od początku do końca: kierowanie ich rozwojem, wdrażanie poprawek i usprawnień oraz uzgadnianie zmian bezpośrednio z klientem.",
+                    "Tworzenie i utrzymanie mikroserwisów w Node.js i Express.",
                     "Tworzenie REST API zabezpieczonych JWT i OAuth, opartych na Microsoft SQL Server i MongoDB.",
                     "Pisanie skryptów automatyzujących i integracyjnych w T-SQL, Pythonie i PowerShellu.",
                     "Refaktoryzacja i optymalizacja istniejącego kodu i logiki aplikacji.",
@@ -220,9 +224,14 @@ const pl = {
             },
             {
                 heading: "Cookies i pamięć przeglądarki",
-                body: "Strona nie używa ciasteczek śledzących, chyba że zgodzisz się na analitykę w ustawieniach cookies. W pamięci przeglądarki zapisuje tylko wybrany język, żeby go zapamiętać. Czcionki i wszystkie inne zasoby są serwowane z tej strony, a nie od firm trzecich.",
+                body: "Strona nie używa żadnych ciasteczek. W pamięci przeglądarki zapisuje tylko wybrany język, żeby go zapamiętać. Czcionki i wszystkie inne zasoby są serwowane z tej strony, a nie od firm trzecich.",
             },
         ],
+        // Zastępuje ostatnią sekcję, gdy w site.config.js włączona jest Google Analytics.
+        analyticsCookies: {
+            heading: "Cookies i analityka",
+            body: "W pamięci przeglądarki zapisuję wybrany język i Twój wybór dotyczący cookies; są one niezbędne do działania strony. Tylko jeśli zaakceptujesz analitykę w banerze cookies, Google Analytics 4 (dostarczane przez Google Ireland Ltd.) ustawia swoje ciasteczka (_ga, _ga_*) na okres do dwóch lat, żeby mierzyć odwiedziny; dane te mogą być przetwarzane przez Google także poza EOG. Podstawą jest Twoja zgoda (art. 6 ust. 1 lit. a RODO), którą możesz w każdej chwili zmienić lub wycofać w \u201eUstawieniach cookies\u201d w stopce. Czcionki i wszystkie inne zasoby są serwowane z tej strony.",
+        },
     },
     cookies: {
         label: "Cookies",
