@@ -24,7 +24,7 @@ const contactInfo = {
 
 const heroCopy = {
   eyebrow: "Full-stack Developer — Portfolio ©2026",
-  title: "Building <em>web apps</em> from database to&nbsp;pixel.",
+  title: "Building <em>apps</em> from database to&nbsp;pixel.",
   intro: "Hi, I'm Patryk. I design and ship production software with React, Svelte, Elixir, Node.js and .NET, and I talk directly with the people who use it.",
   availability: "Available for new projects",
 };
@@ -33,7 +33,7 @@ const aboutText =
   "I take features all the way from database schema and real-time APIs to a polished interface, then ship them with Docker and CI/CD. Three years of commercial work across Elixir, Node.js and .NET taught me that great software is equal parts clean code and clear conversations with clients.";
 
 const counterItems = [
-  { value: 3, suffix: "+", label: "Years of experience", detail: "Commercial, since 2024" },
+  { value: 3, suffix: "+", label: "Years of experience", detail: "Commercial projects" },
   { value: 3, suffix: "", label: "Backend ecosystems", detail: "Elixir · Node.js · .NET" },
   { value: 3, suffix: "", label: "Frontend frameworks", detail: "React · Svelte · LiveView" },
   { value: 45, suffix: "+", label: "Technologies & tools", detail: "And counting" },
@@ -46,6 +46,7 @@ const logoIconsList = [
   { name: "TypeScript", imgPath: "/images/tech/typescript.svg" },
   { name: "Svelte", imgPath: "/images/tech/svelte.svg" },
   { name: "Node.js", imgPath: "/images/tech/nodejs.svg" },
+  { name: "Python", imgPath: "/images/tech/python.svg" },
   { name: "C#", imgPath: "/images/tech/csharp.svg" },
   { name: ".NET", imgPath: "/images/tech/dotnet.svg" },
   { name: "PostgreSQL", imgPath: "/images/tech/postgresql.svg" },
@@ -77,11 +78,11 @@ const projects = [
     title: "Design Office Management Suite",
     tint: "linear-gradient(135deg, #c9d6ff 0%, #f6d4ff 100%)",
     year: "Desktop · Web · Mobile",
-    desc: "A system for running a design office: clients, projects, invoices, payments, tasks and time tracking. One .NET Core REST API serves three apps: a web app and a mobile app built from a single React Native (Expo) codebase, and a WPF desktop app built with MVVM.",
+    desc: "One system that runs an entire design office: clients, projects, invoices, payments, tasks and time tracking in a single place. The team works wherever it suits them, in a WPF desktop app, in the browser or on the phone, and every app stays in sync through one .NET Core REST API. The web and mobile apps share a single codebase, so new features reach every platform at once.",
     tags: ["C#", ".NET Core", "Entity Framework", "WPF / MVVM", "React Native", "Expo", "TypeScript", "SQL Server"],
     architecture: {
       clients: [
-        { name: "Web app", detail: "React Native Web", icon: "/images/tech/react.svg" },
+        { name: "Web app", detail: "React", icon: "/images/tech/react.svg" },
         { name: "Mobile app", detail: "React Native", icon: "/images/tech/react.svg" },
         { name: "Desktop app", detail: "WPF / MVVM", icon: "/images/tech/csharp.svg" },
       ],
@@ -95,26 +96,29 @@ const projects = [
     ],
   },
   {
-    title: "Pizza Restaurant Admin Dashboard",
+    title: "Pizzeria Management Panel & Storefront",
     tint: "linear-gradient(135deg, #ffe0c2 0%, #ffd1dc 100%)",
-    year: "Web dashboard",
-    desc: "A React dashboard for managing the menu, orders, inventory, staff schedules and documents, backed by a .NET REST API.",
+    year: "Admin panel · Storefront",
+    desc: "A complete digital back office for a multi-location pizzeria, paired with a modern storefront for its customers. The React admin panel brings sales, stock, staff schedules, documents, recipes and per-location revenue reports into one clear dashboard, all powered by a .NET REST API on SQL Server.",
     tags: ["React", "React Router", "Bootstrap", "C#", ".NET Core", "SQL Server"],
     architecture: {
-      clients: [{ name: "Web app", detail: "React", icon: "/images/tech/react.svg" }],
+      clients: [
+        { name: "Admin panel", detail: "React", icon: "/images/tech/react.svg" },
+        { name: "Storefront", detail: "React", icon: "/images/tech/react.svg" },
+      ],
       server: { name: ".NET Core", detail: "REST API", icon: "/images/tech/dotnet.svg" },
       database: { name: "SQL Server", detail: "Entity Framework", icon: "/images/tech/microsoftsqlserver.svg" },
     },
     links: [
-      { label: "Frontend", url: "https://github.com/PatrykKonior/ReactAppPizza_Studia" },
+      { label: "Admin panel", url: "https://github.com/PatrykKonior/ReactAppPizza_Studia" },
       { label: "API", url: "https://github.com/PatrykKonior/MVVM_PIZZA_REST_API_CRUD" },
     ],
   },
   {
-    title: "Pento: Phoenix LiveView Store",
+    title: "Pento: Real-time Store on Phoenix LiveView",
     tint: "linear-gradient(135deg, #d5f5e3 0%, #c8e1ff 100%)",
     year: "Real-time store",
-    desc: "An online store built with Phoenix LiveView. Users sign up, browse and search products by SKU, rate them and fill in a demographic survey. The admin dashboard turns ratings into interactive charts filtered by age group and gender, all without page reloads.",
+    desc: "A real-time online store built with Phoenix LiveView. Customers find products fast, rate them and share their feedback, while the owner gets an analytics dashboard that turns that data into interactive charts by customer segment. Everything updates live, with no page reloads and no separate JavaScript front end to maintain.",
     tags: ["Elixir", "Phoenix", "LiveView", "Ecto", "PostgreSQL"],
     architecture: {
       clients: [{ name: "LiveView", detail: "Real-time UI", icon: "/images/tech/phoenix.svg" }],
@@ -135,7 +139,7 @@ const services = [
   {
     title: "Backend & Real-time APIs",
     points: ["REST & WebSockets", "Auth with JWT / OAuth", "SQL & NoSQL data models"],
-    desc: "REST APIs and live features over WebSockets, built with Elixir, Node.js or .NET on top of PostgreSQL, SQL Server or MongoDB.",
+    desc: "REST APIs, microservices and live features over WebSockets, built with Elixir, Node.js or .NET on top of PostgreSQL, SQL Server or MongoDB, plus automation scripts in Python.",
     icons: ["/images/tech/elixir.svg", "/images/tech/nodejs.svg", "/images/tech/dotnet.svg"],
   },
   {
@@ -172,16 +176,18 @@ const expCards = [
   {
     company: "Medas sp. z o.o.",
     logoText: "M",
-    summary: "Promoted after a year on the frontend to take ownership of features across the whole stack.",
+    summary: "Promoted after a year on the frontend to own features across the whole stack and lead three projects.",
     title: "Junior Fullstack Developer",
     period: "2025",
     date: "March 2025 – December 2025 · Hybrid",
     responsibilities: [
+      "Leading three projects end to end: running their development, delivering fixes and improvements, and agreeing changes directly with the client.",
+      "Building and maintaining microservices in Node.js and Express.",
       "Building REST APIs secured with JWT and OAuth, backed by Microsoft SQL Server and MongoDB.",
       "Writing automation and integration scripts in T-SQL, Python and PowerShell.",
       "Refactoring and optimizing existing code and application logic.",
     ],
-    stack: ["Node.js", "Express.js", "TypeScript", "REST API", "JWT / OAuth", "SQL Server", "T-SQL", "MongoDB", "Python", "PowerShell", "Windows Server", "Jest", "React Testing Library"],
+    stack: ["Node.js", "Express.js", "Microservices", "TypeScript", "REST API", "JWT / OAuth", "SQL Server", "T-SQL", "MongoDB", "Python", "PowerShell", "Windows Server", "Linux", "Nginx", "GitHub", "Jest", "React Testing Library"],
   },
   {
     company: "Medas sp. z o.o.",

@@ -71,7 +71,7 @@ const Hero = ({ ready }) => {
 
                 <div className="hero-row hero-row-bottom">
                     <p className="hero-ui hero-lede">
-                        I design and ship web apps end to end, from <em>database</em> to <em>pixel</em>.
+                        I design and ship web, mobile and desktop apps end to end, from <em>database</em> to <em>pixel</em>.
                     </p>
                     <div className="hero-ui hero-badge glass">
                         <span className="live-dot" />
